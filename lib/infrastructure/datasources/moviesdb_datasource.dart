@@ -12,7 +12,7 @@ class TheMovieDbDatasource implements MoviesDatasource {
 
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
-    final httpResponse = await dio.get('/movie/now_playing');    
+    final httpResponse = await dio.get('/movie/now_playing', queryParameters: {'page': page});    
     final List<Movie> movies = [];    
     if (httpResponse.statusCode == 200 && httpResponse.data != null) {
       TheMovieDbResponse movieDbResponse = TheMovieDbResponse.fromJson(httpResponse.data!);
