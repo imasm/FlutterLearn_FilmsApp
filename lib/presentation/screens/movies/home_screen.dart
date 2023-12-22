@@ -44,21 +44,9 @@ class _HomeViewState extends ConsumerState<_HomeView> {
       );
     }
 
-    return Column(
-      children: [
-        const CustomAppbar(),
-        Expanded(
-          child: NowPlayingList(nowPlayingMovies: nowPlayingMovies),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
-          child: const Text('Load more'),
-        ),
-        const SizedBox(height: 16),
-      ]);
+    return Column(children: [
+      const CustomAppbar(), 
+    MoviesSlideshow(movies: nowPlayingMovies)]);
   }
 }
 
