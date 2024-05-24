@@ -19,7 +19,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
 class _HomeView extends ConsumerStatefulWidget {
   const _HomeView();
 
@@ -39,49 +38,51 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideMovies = ref.watch(moviesSlideshowProvider);
 
-    // if (slideMovies.isEmpty) {
-    //   return const Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const CustomAppbar(), 
+    return CustomScrollView(slivers: [
+      const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppbar(),
+            centerTitle: false,
+            titlePadding: EdgeInsetsDirectional.only(
+              start: 0.0,
+              bottom: 16.0,
+            ),
+          )),
+      SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+        return Column(children: [
+          //const CustomAppbar(),
           MoviesSlideshow(movies: slideMovies),
-          
+
           MoviesHorizontalListview(
-            movies: nowPlayingMovies, 
-            title: 'En Cartellera', 
-            subtitle: "Dilluns 20",
-            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
-          ),
-      
+              movies: nowPlayingMovies,
+              title: 'En Cartellera',
+              subtitle: "Dilluns 20",
+              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+
           MoviesHorizontalListview(
-            movies: nowPlayingMovies, 
-            title: 'Proximament', 
-            subtitle: "Aquest mes",
-            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
-          ),
-      
+              movies: nowPlayingMovies,
+              title: 'Proximament',
+              subtitle: "Aquest mes",
+              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+
           MoviesHorizontalListview(
-            movies: nowPlayingMovies, 
-            title: 'Populars', 
-            //subtitle: "",
-            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
-          ),
-      
-           MoviesHorizontalListview(
-            movies: nowPlayingMovies, 
-            title: 'Més valorades', 
-            subtitle: "De sempre",
-            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
-          ),
+              movies: nowPlayingMovies,
+              title: 'Populars',
+              //subtitle: "",
+              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+
+          MoviesHorizontalListview(
+              movies: nowPlayingMovies,
+              title: 'Més valorades',
+              subtitle: "De sempre",
+              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
 
           const SizedBox(height: 20)
-      ]),
-    );
+        ]);
+      }, childCount: 10))
+    ]);
   }
 }
 
