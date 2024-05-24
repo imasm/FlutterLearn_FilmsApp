@@ -45,16 +45,43 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     //   );
     // }
 
-    return Column(
-      children: [
-        const CustomAppbar(), 
-        MoviesSlideshow(movies: slideMovies),
-        MoviesHorizontalListview(
-          movies: nowPlayingMovies, 
-          title: 'En Cartellera', 
-          subtitle: "Dilluns 20",
-          onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
-    ]);
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const CustomAppbar(), 
+          MoviesSlideshow(movies: slideMovies),
+          
+          MoviesHorizontalListview(
+            movies: nowPlayingMovies, 
+            title: 'En Cartellera', 
+            subtitle: "Dilluns 20",
+            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
+          ),
+      
+          MoviesHorizontalListview(
+            movies: nowPlayingMovies, 
+            title: 'Proximament', 
+            subtitle: "Aquest mes",
+            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
+          ),
+      
+          MoviesHorizontalListview(
+            movies: nowPlayingMovies, 
+            title: 'Populars', 
+            //subtitle: "",
+            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
+          ),
+      
+           MoviesHorizontalListview(
+            movies: nowPlayingMovies, 
+            title: 'Més valorades', 
+            subtitle: "De sempre",
+            onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()
+          ),
+
+          const SizedBox(height: 20)
+      ]),
+    );
   }
 }
 
