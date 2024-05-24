@@ -32,12 +32,16 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
     ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
+    final upcomingMovies = ref.watch(upcomingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final slideMovies = ref.watch(moviesSlideshowProvider);
 
     return CustomScrollView(slivers: [
@@ -64,10 +68,10 @@ class _HomeViewState extends ConsumerState<_HomeView> {
               onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
 
           MoviesHorizontalListview(
-              movies: nowPlayingMovies,
+              movies: upcomingMovies,
               title: 'Proximament',
               subtitle: "Aquest mes",
-              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+              onNextPage: () => ref.read(upcomingMoviesProvider.notifier).loadNextPage()),
 
           MoviesHorizontalListview(
               movies: popularMovies,
@@ -76,10 +80,10 @@ class _HomeViewState extends ConsumerState<_HomeView> {
               onNextPage: () => ref.read(popularMoviesProvider.notifier).loadNextPage()),
 
           MoviesHorizontalListview(
-              movies: nowPlayingMovies,
+              movies: topRatedMovies,
               title: 'Més valorades',
               subtitle: "De sempre",
-              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+              onNextPage: () => ref.read(topRatedMoviesProvider.notifier).loadNextPage()),
 
           const SizedBox(height: 20)
         ]);

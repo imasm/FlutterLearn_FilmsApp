@@ -10,8 +10,7 @@ class TheMovieDbDatasource implements MoviesDatasource {
       baseUrl: 'https://api.themoviedb.org/3',
       queryParameters: {'api_key': Environment.theMovieDbKey, 'language': 'es-ES', 'region': 'ES'}));
 
-  Future<List<Movie>> _getMovies(String category, {int page = 1}) async {
-    final httpResponse = await dio.get('/movie/$category', queryParameters: {'page': page});
+  Future<List<Movie>> _getMoviesFromResponse(Response<dynamic> httpResponse) async {
     final List<Movie> movies = [];
     if (httpResponse.statusCode == 200 && httpResponse.data != null) {
       TheMovieDbResponse movieDbResponse = TheMovieDbResponse.fromJson(httpResponse.data!);
@@ -25,11 +24,25 @@ class TheMovieDbDatasource implements MoviesDatasource {
 
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
-    return await _getMovies('now_playing');
+    final httpResponse = await dio.get('/movie/now_playing', queryParameters: {'page': page});
+    return await _getMoviesFromResponse(httpResponse);
   }
 
   @override
   Future<List<Movie>> getPopular({int page = 1}) async {
-    return await _getMovies('popular');
+    final httpResponse = await dio.get('/movie/popular', queryParameters: {'page': page});
+    return await _getMoviesFromResponse(httpResponse);
+  }
+
+  @override
+  Future<List<Movie>> getUpcoming({int page = 1}) async {
+    final httpResponse = await dio.get('/movie/upcoming', queryParameters: {'page': page});
+    return await _getMoviesFromResponse(httpResponse);
+  }
+
+  @override
+  Future<List<Movie>> getTopRated({int page = 1}) async {
+    final httpResponse = await dio.get('/movie/top_rated', queryParameters: {'page': page});
+    return await _getMoviesFromResponse(httpResponse);
   }
 }
