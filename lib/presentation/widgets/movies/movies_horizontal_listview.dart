@@ -3,7 +3,7 @@ import 'package:cinemapedia/config/helpers/human_formats.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
-class MoviesHorizontalListview extends StatelessWidget {
+class MoviesHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subtitle;
@@ -13,17 +13,45 @@ class MoviesHorizontalListview extends StatelessWidget {
   const MoviesHorizontalListview({super.key, required this.movies, this.title, this.subtitle, this.onNextPage});
 
   @override
+  State<MoviesHorizontalListview> createState() => _MoviesHorizontalListviewState();
+}
+
+class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      var onNextPage = widget.onNextPage;
+      if (onNextPage == null) return;
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 500) {
+        print('Load next page');
+        onNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
         height: 350,
         child: Column(
           children: [
-            if (title != null || subtitle != null) _Title(title: title, subtitle: subtitle),
+            if (widget.title != null || widget.subtitle != null) _Title(title: widget.title, subtitle: widget.subtitle),
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: movies.length,
-                itemBuilder: (_, int index) => _MovieSlide(movie: movies[index]),
+                controller: _scrollController,
+                itemCount: widget.movies.length,
+                itemBuilder: (_, int index) => _MovieSlide(movie: widget.movies[index]),
               ),
             ),
           ],
@@ -33,7 +61,7 @@ class MoviesHorizontalListview extends StatelessWidget {
 
 class _MovieSlide extends StatelessWidget {
   final Movie movie;
-  
+
   const _MovieSlide({required this.movie});
 
   @override
@@ -41,7 +69,7 @@ class _MovieSlide extends StatelessWidget {
     final theme = Theme.of(context);
     final titleStyle = theme.textTheme.titleMedium;
     final infoStyle = theme.textTheme.bodyMedium;
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -56,17 +84,17 @@ class _MovieSlide extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: titleStyle,
               )),
-            //const Spacer(),
+          //const Spacer(),
           SizedBox(
             width: 150,
             child: Row(
               children: [
-              Icon(Icons.star_half, color: Colors.yellow.shade800),
-              const SizedBox(width: 5),
-              Text('${movie.voteAverage}', style: infoStyle?.copyWith(color: Colors.yellow.shade800, fontWeight: FontWeight.bold)),
-              const Spacer(),
-              Text(HumanFormats.humanReadableNumber(movie.popularity), style: infoStyle),
-            
+                Icon(Icons.star_half, color: Colors.yellow.shade800),
+                const SizedBox(width: 5),
+                Text('${movie.voteAverage}',
+                    style: infoStyle?.copyWith(color: Colors.yellow.shade800, fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Text(HumanFormats.humanReadableNumber(movie.popularity), style: infoStyle),
               ],
             ),
           )
