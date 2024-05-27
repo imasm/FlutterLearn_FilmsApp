@@ -8,7 +8,6 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   static const name = 'home-screen';
-  static const route = '/';
 
   @override
   Widget build(BuildContext context) {
