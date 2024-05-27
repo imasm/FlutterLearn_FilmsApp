@@ -2,7 +2,7 @@ import 'package:cinemapedia/config/constants/environment.dart';
 import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/infrastructure/mappers/movie_mapper.dart';
-import 'package:cinemapedia/infrastructure/models/movieDb/moviedb_response.dart';
+import 'package:cinemapedia/infrastructure/models/moviedb_models.dart';
 import 'package:dio/dio.dart';
 
 class TheMovieDbDatasource implements MoviesDatasource {
@@ -44,5 +44,16 @@ class TheMovieDbDatasource implements MoviesDatasource {
   Future<List<Movie>> getTopRated({int page = 1}) async {
     final httpResponse = await dio.get('/movie/top_rated', queryParameters: {'page': page});
     return await _getMoviesFromResponse(httpResponse);
+  }
+
+  @override
+  Future<Movie> getMovieDetails(String movieId) async {
+    final httpResponse = await dio.get('/movie/$movieId');
+    if (httpResponse.statusCode == 200 && httpResponse.data != null) {
+      TheMovieDbMovieDetails movieDbDetails = TheMovieDbMovieDetails.fromJson(httpResponse.data!);
+      return MovieMapper.fromMovieDbDetails(movieDbDetails);
+    }
+
+    throw Exception('Error getting movie details');
   }
 }

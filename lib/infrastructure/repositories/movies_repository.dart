@@ -27,5 +27,10 @@ class MoviesRepositoryImpl extends MoviesRepository {
     return await moviesDataSource.getTopRated(page: page);
   }
 
+  @override
+  Future<Movie> getMovieDetails(String movieId) async {
+    return await moviesDataSource.getMovieDetails(movieId);
+  }
+
 }
 
