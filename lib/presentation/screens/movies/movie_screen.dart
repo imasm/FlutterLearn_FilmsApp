@@ -1,6 +1,7 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_details_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
@@ -36,8 +37,102 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
       physics: const ClampingScrollPhysics(),
       slivers: [
         _CustomSliverAppBar(movie: currentMovie),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => _MovieDetails(movie: currentMovie),
+          childCount: 1)
+        )
       ],
     ));
+  }
+}
+
+class _MovieDetails extends StatelessWidget {
+  final Movie movie;
+  const _MovieDetails({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    final Size  deviceSize = MediaQuery.of(context).size;
+    
+
+    return   Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _MovieDetailsPoster(posterPath: movie.posterPath, posterWitdh: deviceSize.width * 0.3),
+              const SizedBox(width: 10),
+              _MovieDetailsText( movie: movie, width: (deviceSize.width - 40) * 0.7)
+            ],
+          ),
+        ),
+
+        // Generes de la pel·lícula
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            spacing: 10,
+            children: movie.genreIds.map((genre) => 
+              Chip(label: Text(genre), shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
+            ).toList(),
+          ),
+        ),
+        // TODO: Afegir actors
+        
+        // Deixa un espai en blanc al final
+        const SizedBox(height: 100),
+      ],
+    );
+  }
+}
+
+class _MovieDetailsText extends StatelessWidget {
+  const _MovieDetailsText({
+    required this.movie,
+    required this.width,    
+  });
+
+  final double width;
+  final Movie movie;
+
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+
+    return SizedBox(
+      width: width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(movie.title, style: textStyles.titleLarge),
+          Text(movie.overview, textAlign: TextAlign.justify,),
+        ],
+      ),
+    );
+  }
+}
+
+class _MovieDetailsPoster extends StatelessWidget {
+  const _MovieDetailsPoster({
+    required this.posterPath,
+    required this.posterWitdh,
+  });
+
+  final String posterPath;
+  final double posterWitdh;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.network(posterPath, width: posterWitdh),
+    );
   }
 }
 
