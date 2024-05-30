@@ -103,7 +103,27 @@ class _MovieActors extends ConsumerWidget {
     final actors = ref.watch(actorsByMovieProvider);
 
     // TODO: Afegir els actors    
-    return Placeholder();
+    return SizedBox(
+      height: 300,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: actors.length,
+        itemBuilder: (context, index) {
+          return Container(
+            width: 150,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(actors[index].profilePath),
+                ),
+                Text(actors[index].name),
+              ],
+            ),
+          );
+        },
+      )
+    );
   }
 }
 
