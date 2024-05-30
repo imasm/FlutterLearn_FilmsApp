@@ -1,7 +1,7 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/presentation/providers/actors/actors_provider.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_details_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
@@ -20,6 +20,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   void initState() {
     super.initState();
     ref.read(movieDetailsProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsByMovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
@@ -82,12 +83,27 @@ class _MovieDetails extends StatelessWidget {
             ).toList(),
           ),
         ),
+
         // TODO: Afegir actors
-        
+        _MovieActors(movieId: movie.id),
+
         // Deixa un espai en blanc al final
         const SizedBox(height: 100),
       ],
     );
+  }
+}
+
+class _MovieActors extends ConsumerWidget {
+  final int movieId;
+  const _MovieActors({required this.movieId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final actors = ref.watch(actorsByMovieProvider);
+
+    // TODO: Afegir els actors    
+    return Placeholder();
   }
 }
 

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/infrastructure/models/moviedb_models.dart';
 
