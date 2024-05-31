@@ -42,7 +42,7 @@ class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 380,
       child: Column(
         children: [
           if (widget.title != null || widget.subtitle != null) _Title(title: widget.title, subtitle: widget.subtitle),
