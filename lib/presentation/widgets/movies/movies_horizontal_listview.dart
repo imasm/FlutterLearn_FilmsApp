@@ -42,20 +42,21 @@ class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 350,
-        child: Column(
-          children: [
-            if (widget.title != null || widget.subtitle != null) _Title(title: widget.title, subtitle: widget.subtitle),
-            Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                controller: _scrollController,
-                itemCount: widget.movies.length,
-                itemBuilder: (_, int index) => FadeInRight(child: _MovieSlide(movie: widget.movies[index])),
-              ),
+      height: 380,
+      child: Column(
+        children: [
+          if (widget.title != null || widget.subtitle != null) _Title(title: widget.title, subtitle: widget.subtitle),
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              controller: _scrollController,
+              itemCount: widget.movies.length,
+              itemBuilder: (_, int index) => FadeInRight(child: _MovieSlide(movie: widget.movies[index])),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -128,10 +129,7 @@ class _ImagePoster extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return GestureDetector(
-              onTap: () => context.push('/movie/${movie.id}'),
-              child: FadeIn(child: image)
-            );
+            return GestureDetector(onTap: () => context.push('/movie/${movie.id}'), child: FadeIn(child: image));
           },
         ));
   }
@@ -152,15 +150,16 @@ class _Title extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Row(
         children: [
           Text(title ?? '', style: theme.textTheme.titleLarge),
           const Spacer(),
-          FilledButton.tonal(
-              style: const ButtonStyle(visualDensity: VisualDensity.compact),
-              onPressed: () {},
-              child: Text(subtitle ?? '')),
+          if (subtitle != null)
+            FilledButton.tonal(
+                style: const ButtonStyle(visualDensity: VisualDensity.compact),
+                onPressed: () {},
+                child: Text(subtitle!))
         ],
       ),
     );
