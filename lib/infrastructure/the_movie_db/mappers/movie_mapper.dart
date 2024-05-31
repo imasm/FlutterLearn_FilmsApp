@@ -1,7 +1,6 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import '../themoviedb_models.dart';
 
-
 class MovieMapper {
   static String imageNotFound =
       'https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg';

@@ -56,4 +56,10 @@ class TheMovieDbMoviesDatasource implements MoviesDatasource {
 
     throw Exception('Error getting movie details');
   }
+
+    @override
+  Future<List<Movie>> searchMovies(String query) async {
+    final httpResponse = await dio.get('/search/movie', queryParameters: {'query': query});
+    return await _getMoviesFromResponse(httpResponse);
+  }
 }
