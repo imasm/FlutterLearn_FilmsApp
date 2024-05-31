@@ -1,7 +1,7 @@
 class TheMovieDbCreditsResponse {
     final int id;
-    final List<Cast> cast;
-    final List<Cast> crew;
+    final List<TheMovieDbCast> cast;
+    final List<TheMovieDbCast> crew;
 
     TheMovieDbCreditsResponse({
         required this.id,
@@ -11,8 +11,8 @@ class TheMovieDbCreditsResponse {
 
     factory TheMovieDbCreditsResponse.fromJson(Map<String, dynamic> json) => TheMovieDbCreditsResponse(
         id: json["id"],
-        cast: List<Cast>.from(json["cast"].map((x) => Cast.fromJson(x))),
-        crew: List<Cast>.from(json["crew"].map((x) => Cast.fromJson(x))),
+        cast: List<TheMovieDbCast>.from(json["cast"].map((x) => TheMovieDbCast.fromJson(x))),
+        crew: List<TheMovieDbCast>.from(json["crew"].map((x) => TheMovieDbCast.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -22,7 +22,7 @@ class TheMovieDbCreditsResponse {
     };
 }
 
-class Cast {
+class TheMovieDbCast {
     final bool adult;
     final int gender;
     final int id;
@@ -38,7 +38,7 @@ class Cast {
     final String? department;
     final String? job;
 
-    Cast({
+    TheMovieDbCast({
         required this.adult,
         required this.gender,
         required this.id,
@@ -55,7 +55,7 @@ class Cast {
         this.job,
     });
 
-    factory Cast.fromJson(Map<String, dynamic> json) => Cast(
+    factory TheMovieDbCast.fromJson(Map<String, dynamic> json) => TheMovieDbCast(
         adult: json["adult"],
         gender: json["gender"],
         id: json["id"],
@@ -90,14 +90,3 @@ class Cast {
     };
 }
 
-class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-            reverseMap = map.map((k, v) => MapEntry(v, k));
-            return reverseMap;
-    }
-}

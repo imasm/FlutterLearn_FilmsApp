@@ -1,5 +1,5 @@
 import 'package:cinemapedia/domain/entities/actor.dart';
-import 'package:cinemapedia/infrastructure/models/movieDb/moviedb_credits_response.dart';
+import '../themoviedb_models.dart';
 
 class ActorMapper {
     static String imageNotFound =
@@ -9,7 +9,7 @@ class ActorMapper {
   static String theMovieDbBackdropSize ='w500';
   static String theMovieDbPosterSize ='w500';
 
-   static Actor fromMovieDb(Cast cast) => Actor(
+   static Actor fromMovieDb(TheMovieDbCast cast) => Actor(
     id: cast.id,
     name: cast.name,
     profilePath: cast.profilePath != null ? 

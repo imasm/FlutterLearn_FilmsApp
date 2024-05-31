@@ -1,4 +1,4 @@
-import 'moviedb_movie.dart';
+import 'themoviedb_movie.dart';
 
 class TheMovieDbResponse {
     final Dates? dates;
