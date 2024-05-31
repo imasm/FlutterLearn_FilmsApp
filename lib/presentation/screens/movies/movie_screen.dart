@@ -2,6 +2,7 @@ import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/actors/actors_provider.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_details_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MovieScreen extends ConsumerStatefulWidget {
@@ -39,10 +40,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
       slivers: [
         _CustomSliverAppBar(movie: currentMovie),
         SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => _MovieDetails(movie: currentMovie),
-          childCount: 1)
-        )
+            delegate: SliverChildBuilderDelegate((context, index) => _MovieDetails(movie: currentMovie), childCount: 1))
       ],
     ));
   }
@@ -54,12 +52,10 @@ class _MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size  deviceSize = MediaQuery.of(context).size;
-    
+    final Size deviceSize = MediaQuery.of(context).size;
 
-    return   Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -68,7 +64,7 @@ class _MovieDetails extends StatelessWidget {
             children: [
               _MovieDetailsPoster(posterPath: movie.posterPath, posterWitdh: deviceSize.width * 0.3),
               const SizedBox(width: 10),
-              _MovieDetailsText( movie: movie, width: (deviceSize.width - 40) * 0.7)
+              _MovieDetailsText(movie: movie, width: (deviceSize.width - 40) * 0.7)
             ],
           ),
         ),
@@ -78,17 +74,17 @@ class _MovieDetails extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Wrap(
             spacing: 10,
-            children: movie.genreIds.map((genre) => 
-              Chip(label: Text(genre), shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))
-            ).toList(),
+            children: movie.genreIds
+                .map((genre) =>
+                    Chip(label: Text(genre), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))
+                .toList(),
           ),
         ),
 
-        // TODO: Afegir actors
         _MovieActors(movieId: movie.id),
 
         // Deixa un espai en blanc al final
-        const SizedBox(height: 100),
+        const SizedBox(height: 50),
       ],
     );
   }
@@ -102,40 +98,55 @@ class _MovieActors extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final actors = ref.watch(actorsByMovieProvider);
 
-    // TODO: Afegir els actors    
     return SizedBox(
-      height: 300,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: actors.length,
-        itemBuilder: (context, index) {
-          return Container(
-            width: 150,
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(actors[index].profilePath),
-                ),
-                Text(actors[index].name),
-              ],
-            ),
-          );
-        },
-      )
-    );
+        height: 300,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: actors.length,
+          itemBuilder: (context, index) {
+            final actor = actors[index];
+            return Container(
+              padding: const EdgeInsets.all(8),
+              width: 135,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(actor.profilePath, height: 180, width: 135, fit: BoxFit.cover),
+                  ),
+                  Text(actor.name, maxLines: 2),
+                  Text(actor.character ?? "", maxLines: 2, style:
+                  const TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),),
+                ],
+              ),
+            );
+            // return Container(
+            //   padding: const EdgeInsets.all(8),
+            //   width: 135,
+            //   child: Column(
+            //     children: [
+            //       CircleAvatar(
+            //         radius: 50,
+            //         backgroundImage: NetworkImage(actors[index].profilePath),
+            //       ),
+            //       Text(actors[index].name),
+            //     ],
+            //   ),
+            // );
+          },
+        ));
   }
 }
 
 class _MovieDetailsText extends StatelessWidget {
   const _MovieDetailsText({
     required this.movie,
-    required this.width,    
+    required this.width,
   });
 
   final double width;
   final Movie movie;
-
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +158,10 @@ class _MovieDetailsText extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(movie.title, style: textStyles.titleLarge),
-          Text(movie.overview, textAlign: TextAlign.justify,),
+          Text(
+            movie.overview,
+            textAlign: TextAlign.justify,
+          ),
         ],
       ),
     );
@@ -255,10 +269,8 @@ class _AppBarGoBackGradient extends StatelessWidget {
     return const SizedBox.expand(
         child: DecoratedBox(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              stops: [0, 0.3],
-              colors: [Colors.black87, Colors.transparent])),
+          gradient:
+              LinearGradient(begin: Alignment.topLeft, stops: [0, 0.3], colors: [Colors.black87, Colors.transparent])),
     ));
   }
 }
