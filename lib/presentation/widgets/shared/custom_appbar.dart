@@ -1,6 +1,6 @@
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/delegates/search_movie_delegate.dart';
-import 'package:cinemapedia/presentation/providers/movies/movies_repository_provider.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +16,7 @@ class CustomAppbar extends ConsumerWidget {
     final hasNotch = MediaQuery.of(context).viewPadding.top > 40;
 
     return SafeArea(
-      child: Padding(
+        child: Padding(
       padding: EdgeInsets.fromLTRB(10, hasNotch ? 0 : 15, 10, 0),
       child: SizedBox(
           width: double.infinity,
@@ -26,17 +26,23 @@ class CustomAppbar extends ConsumerWidget {
               const SizedBox(width: 8),
               Text('Cinemapedia', style: titleStyle),
               const Spacer(),
-              IconButton(onPressed: () {
-                  final movieRepository = ref.read(moviesRepositoryProvider);
-                  showSearch<Movie?>(
-                    context: context, 
-                    delegate:  SearchMovieDelegate(movieRepository.searchMovies))
-                    .then((movie) => {
-                      if (movie != null) {
-                         context.push('/movie/${movie.id}')
-                      }
-                    });
-              }, icon: Icon(Icons.search, color: colors.primary))
+              IconButton(
+                  onPressed: () {
+                    final movieRepository = ref.read(moviesRepositoryProvider);
+                    final searchQuery = ref.read(searchQueryProvider);
+                    showSearch<Movie?>(
+                        query: searchQuery,
+                        context: context,
+                        delegate: SearchMovieDelegate(
+                          searchMovies: (query) {
+                            ref.read(searchQueryProvider.notifier).update((state) => query);
+                            return movieRepository.searchMovies(query);
+                          },
+                        )).then((movie) => {
+                          if (movie != null) {context.push('/movie/${movie.id}')}
+                        });
+                  },
+                  icon: Icon(Icons.search, color: colors.primary))
             ],
           )),
     ));

@@ -13,7 +13,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
 
   final SearchMoviesCallback searchMovies;
-  SearchMovieDelegate(this.searchMovies);
+  SearchMovieDelegate({required this.searchMovies});
 
   // cada cop que es canvia el text del search bar, es crida aquest mètode
   // però no volem fer una crida a la API per cada lletra que s'escriu
