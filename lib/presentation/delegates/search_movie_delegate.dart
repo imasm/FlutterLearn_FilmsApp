@@ -10,7 +10,9 @@ typedef MovieSelectedCallback = void Function(Movie movie);
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   Timer? _debouceTimer;
+
   StreamController<List<Movie>> debouncedMovies = StreamController.broadcast();
+  StreamController<bool> isLoadingStream = StreamController.broadcast();
 
   final SearchMoviesCallback searchMovies;
   List<Movie> initialMovies;
@@ -24,21 +26,28 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // per això, es fa servir un timer per esperar 500ms abans de fer la crida
   // a la API
   void _onQueryChanged(String query) {
+
+    // tant bon punt escrius una lletra, es mostra el spinner de carregant
+    isLoadingStream.add(true);
+
     // si el timer està actiu (la query ha canviat abans de 500ms), es cancela
     if (_debouceTimer?.isActive ?? false) {
       _debouceTimer?.cancel();
     }
 
     _debouceTimer = Timer(const Duration(milliseconds: 500), () async {
+      //isLoadingStream.add(true);
       final movies = await searchMovies(query);
       initialMovies = movies;
       debouncedMovies.add(movies);
+      isLoadingStream.add(false);
     });
   }
 
-  // Tanquem el stream quan es tanca el delegate
+  // Tanquem els streams quan es tanca el delegate
   clearStreams() {
     debouncedMovies.close();
+    isLoadingStream.close();
   }
 
   @override
@@ -47,8 +56,30 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      FadeIn(animate: query.isNotEmpty, child: IconButton(onPressed: () => {query = ''}, icon: const Icon(Icons.clear)))
+      StreamBuilder(
+          initialData: false,
+          stream: isLoadingStream.stream,
+          builder: (context, snapshot) {
+            final isLoading = snapshot.data ?? false;
+            return isLoading
+                ? searchingSpinner()
+                : closeSearchButton();
+          })
     ];
+  }
+
+  Widget searchingSpinner() {
+    return SpinPerfect(
+        duration: const Duration(seconds: 1),
+        spins: 10,
+        infinite: true,
+        child: IconButton(onPressed: () => {}, icon: const Icon(Icons.refresh)));
+  }
+
+  Widget closeSearchButton() {
+    return FadeIn(
+      animate: query.isNotEmpty,
+      child: IconButton(onPressed: () => {query = ''}, icon: const Icon(Icons.clear)));
   }
 
   @override
