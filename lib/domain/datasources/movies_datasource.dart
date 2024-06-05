@@ -7,4 +7,6 @@ abstract class MoviesDatasource {
   Future<List<Movie>> getTopRated({int page = 1});
 
   Future<Movie> getMovieDetails(String movieId);
+
+  Future<List<Movie>> searchMovies(String query);
 }

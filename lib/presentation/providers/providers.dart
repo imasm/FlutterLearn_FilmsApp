@@ -5,3 +5,4 @@ export 'movies/movies_slide_provider.dart';
 
 export 'actors/actors_provider.dart';
 export 'actors/actors_repository_provider.dart';
+export 'search/search_movies_provider.dart';

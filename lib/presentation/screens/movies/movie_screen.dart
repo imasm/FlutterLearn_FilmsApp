@@ -316,6 +316,7 @@ class _ActorPhoto extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
 class _ActorAvatar extends StatelessWidget {
   const _ActorAvatar({required this.actor});
 
