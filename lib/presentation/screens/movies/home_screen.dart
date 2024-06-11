@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body:  navigationShell,
-      bottomNavigationBar:  CustomBottomNavigation(navigationShell: navigationShell),
+      bottomNavigationBar: CustomNavigationBar(navigationShell: navigationShell),
     );
   }
 }
