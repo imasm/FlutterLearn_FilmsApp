@@ -3,6 +3,7 @@ import 'package:cinemapedia/domain/entities/actor.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:cinemapedia/presentation/providers/actors/actors_provider.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_details_provider.dart';
+import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,14 +65,21 @@ class _MoviePosterAppBar extends StatelessWidget {
       foregroundColor: Colors.white,
       shadowColor: Colors.red,
       expandedHeight: deviceSize.height * 0.7, // 70% of the screen
-
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.favorite_border),
+          //icon: const Icon(Icons.favorite_rounded, color: Colors.red),
+          onPressed: () {},
+        )
+      ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         title: _MoviePosterAppBarTitle(movieTitle: movie.title),
         background: Stack(children: [
           _MoviePosterAppBarImage(movie: movie),
           const _MoviePosterAppBarTitleGradient(),
-          const _MoviePosterAppBarGoBackGradient()
+          const _MoviePosterAppBarGoBackGradient(),
+          const _MoviePosterAppBarFavGradient()
         ]),
       ),
     );
@@ -107,7 +115,7 @@ class _MoviePosterAppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       movieTitle,
-      style: const TextStyle(fontSize: 20),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       textAlign: TextAlign.start,
     );
   }
@@ -119,15 +127,11 @@ class _MoviePosterAppBarTitleGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.expand(
-        child: DecoratedBox(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.7, 1],
-              colors: [Colors.transparent, Colors.black87])),
-    ));
+    return const GradientLayer(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        stops: [0.7, 1],
+        colors: [Colors.transparent, Colors.black87]);
   }
 }
 
@@ -137,14 +141,28 @@ class _MoviePosterAppBarGoBackGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.expand(
-        child: DecoratedBox(
-      decoration: BoxDecoration(
-          gradient:
-              LinearGradient(begin: Alignment.topLeft, stops: [0, 0.3], colors: [Colors.black87, Colors.transparent])),
-    ));
+    return const GradientLayer(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        stops: [0, 0.3],
+        colors: [Colors.black87, Colors.transparent]);
   }
 }
+
+// Create a gradient to make the go back button more readable
+class _MoviePosterAppBarFavGradient extends StatelessWidget {
+  const _MoviePosterAppBarFavGradient();
+
+  @override
+  Widget build(BuildContext context) {
+    return const GradientLayer(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        stops: [0, 0.3],
+        colors: [Colors.black54, Colors.transparent]);
+  }
+}
+
 
 // Shows the details of the movie.
 class _MovieContent extends StatelessWidget {

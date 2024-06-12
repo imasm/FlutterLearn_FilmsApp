@@ -156,7 +156,7 @@ class _MoviePoster extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return GestureDetector(onTap: () => context.push('/movie/${movie.id}'), child: FadeIn(child: image));
+            return GestureDetector(onTap: () => context.push('/movies/${movie.id}'), child: FadeIn(child: image));
           },
         ));
   }

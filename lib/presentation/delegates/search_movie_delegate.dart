@@ -26,7 +26,6 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   // per això, es fa servir un timer per esperar 500ms abans de fer la crida
   // a la API
   void _onQueryChanged(String query) {
-
     // tant bon punt escrius una lletra, es mostra el spinner de carregant
     isLoadingStream.add(true);
 
@@ -39,8 +38,14 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       //isLoadingStream.add(true);
       final movies = await searchMovies(query);
       initialMovies = movies;
-      debouncedMovies.add(movies);
-      isLoadingStream.add(false);
+      
+      if (!debouncedMovies.isClosed) {
+        debouncedMovies.add(movies);
+      }
+
+      if (!isLoadingStream.isClosed) {
+        isLoadingStream.add(false);
+      }
     });
   }
 
@@ -61,9 +66,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           stream: isLoadingStream.stream,
           builder: (context, snapshot) {
             final isLoading = snapshot.data ?? false;
-            return isLoading
-                ? searchingSpinner()
-                : closeSearchButton();
+            return isLoading ? searchingSpinner() : closeSearchButton();
           })
     ];
   }
@@ -78,8 +81,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   Widget closeSearchButton() {
     return FadeIn(
-      animate: query.isNotEmpty,
-      child: IconButton(onPressed: () => {query = ''}, icon: const Icon(Icons.clear)));
+        animate: query.isNotEmpty, child: IconButton(onPressed: () => {query = ''}, icon: const Icon(Icons.clear)));
   }
 
   @override
