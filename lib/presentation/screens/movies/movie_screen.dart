@@ -1,8 +1,6 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemapedia/domain/entities/actor.dart';
-import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/presentation/providers/actors/actors_provider.dart';
-import 'package:cinemapedia/presentation/providers/movies/movie_details_provider.dart';
+import 'package:cinemapedia/domain/domain.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,13 +51,15 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
 // Screen AppBar
 // Shows the movie poster and title in a flexible space bar.
 // Starts with a height of 70% of the screen and shrinks to 10% when scrolling.
-class _MoviePosterAppBar extends StatelessWidget {
+class _MoviePosterAppBar extends ConsumerWidget {
   final Movie movie;
   const _MoviePosterAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final deviceSize = MediaQuery.of(context).size;
+    final isFavoriteFuture = ref.watch(isFavoriteProvider(movie.id));
+
     return SliverAppBar(
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
@@ -67,9 +67,26 @@ class _MoviePosterAppBar extends StatelessWidget {
       expandedHeight: deviceSize.height * 0.7, // 70% of the screen
       actions: [
         IconButton(
-          icon: const Icon(Icons.favorite_border),
-          //icon: const Icon(Icons.favorite_rounded, color: Colors.red),
-          onPressed: () {},
+          icon: isFavoriteFuture.when(
+            data: (data){ 
+              return data ? const Icon(Icons.favorite, color: Colors.red) : const Icon(Icons.favorite_border);
+            },
+            error: (error, stack) =>throw Exception("Error loading favorite"),
+            loading: () => const Icon(Icons.favorite_border)
+          ),
+         
+          
+          // Es fa async perque necessitem que es completi la crida a tooogleFavorite 
+          // abans de refrescar el provider
+          onPressed: () async {
+            FavoriteMovie fav =FavoriteMovie(movieId: movie.id, 
+            title: movie.title, 
+            posterPath: movie.posterPath,
+            backdropPath: movie.backdropPath);
+
+            await ref.watch(favoritesRepositoryProvider).toogleFavorite(fav);
+            ref.invalidate(isFavoriteProvider(movie.id));
+          },
         )
       ],
       flexibleSpace: FlexibleSpaceBar(
