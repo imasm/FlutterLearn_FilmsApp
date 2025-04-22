@@ -49,7 +49,7 @@ const FavoriteMovieSchema = CollectionSchema(
   getId: _favoriteMovieGetId,
   getLinks: _favoriteMovieGetLinks,
   attach: _favoriteMovieAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _favoriteMovieEstimateSize(

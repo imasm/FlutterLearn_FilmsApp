@@ -9,3 +9,8 @@ Exemple del curs de [Flutter - Móvil: De cero a experto](https://www.udemy.com/
 * Rest Api de TheMovieDb
 * BD Local : Isar
 
+
+# TheMovieDb Key
+* Anar a la pàgina [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) per tenir la clau de l'API
+* Copiar el fitxer .env.template a .env
+* Editar el fitxer per posar la clau pròpia.
