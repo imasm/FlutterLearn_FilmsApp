@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+// Bottom navigation bar for the app
+// It uses the NavigationShell to manage the current index and navigation between branches
 class CustomNavigationBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
   const CustomNavigationBar({super.key, required this.navigationShell});

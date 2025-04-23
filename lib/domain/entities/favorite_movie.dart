@@ -10,6 +10,7 @@ class FavoriteMovie {
   final String posterPath;
 
   FavoriteMovie({
+    this.id,
     required this.movieId,
     required this.title,
     required this.backdropPath,

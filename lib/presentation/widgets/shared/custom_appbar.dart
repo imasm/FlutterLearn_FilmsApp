@@ -22,10 +22,15 @@ class CustomAppbar extends ConsumerWidget {
           width: double.infinity,
           child: Row(
             children: [
+              // Movies icon
               Icon(Icons.movie_outlined, color: colors.primary),
               const SizedBox(width: 8),
+
+              // App name
               Text('Cinemapedia', style: titleStyle),
               const Spacer(),
+
+              // Search button
               IconButton(
                   onPressed: () {
                     final searchProviderNotifier = ref.read(searchMoviesProvider.notifier);

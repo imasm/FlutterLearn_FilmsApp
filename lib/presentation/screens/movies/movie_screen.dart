@@ -42,7 +42,9 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
       slivers: [
         _MoviePosterAppBar(movie: currentMovie),
         SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) => _MovieContent(movie: currentMovie), childCount: 1))
+            delegate: SliverChildBuilderDelegate(
+                (context, index) => _MovieContent(movie: currentMovie),
+                childCount: 1))
       ],
     ));
   }
@@ -66,23 +68,25 @@ class _MoviePosterAppBar extends ConsumerWidget {
       shadowColor: Colors.red,
       expandedHeight: deviceSize.height * 0.7, // 70% of the screen
       actions: [
+        // Boto de favorit
         IconButton(
           icon: isFavoriteFuture.when(
-            data: (data){ 
-              return data ? const Icon(Icons.favorite, color: Colors.red) : const Icon(Icons.favorite_border);
-            },
-            error: (error, stack) =>throw Exception("Error loading favorite"),
-            loading: () => const Icon(Icons.favorite_border)
-          ),
-         
-          
-          // Es fa async perque necessitem que es completi la crida a tooogleFavorite 
+              data: (data) {
+                return data
+                    ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                    : const Icon(Icons.favorite_border);
+              },
+              error: (error, stack) => throw Exception("Error loading favorite"),
+              loading: () => const Icon(Icons.favorite_border)),
+
+          // Es fa async perque necessitem que es completi la crida a tooogleFavorite
           // abans de refrescar el provider
           onPressed: () async {
-            FavoriteMovie fav =FavoriteMovie(movieId: movie.id, 
-            title: movie.title, 
-            posterPath: movie.posterPath,
-            backdropPath: movie.backdropPath);
+            FavoriteMovie fav = FavoriteMovie(
+                movieId: movie.id,
+                title: movie.title,
+                posterPath: movie.posterPath,
+                backdropPath: movie.backdropPath);
 
             await ref.watch(favoritesRepositoryProvider).toogleFavorite(fav);
             ref.invalidate(isFavoriteProvider(movie.id));
@@ -179,7 +183,6 @@ class _MoviePosterAppBarFavGradient extends StatelessWidget {
         colors: [Colors.black54, Colors.transparent]);
   }
 }
-
 
 // Shows the details of the movie.
 class _MovieContent extends StatelessWidget {
@@ -291,8 +294,9 @@ class _MovieGenres extends StatelessWidget {
     return Wrap(
       spacing: 10,
       children: movie.genreIds
-          .map((genre) =>
-              Chip(label: Text(genre), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))
+          .map((genre) => Chip(
+              label: Text(genre),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))
           .toList(),
     );
   }
@@ -325,7 +329,8 @@ class _MovieActors extends ConsumerWidget {
                   Text(
                     actor.character ?? "",
                     maxLines: 2,
-                    style: const TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
                   ),
                 ],
               ),
