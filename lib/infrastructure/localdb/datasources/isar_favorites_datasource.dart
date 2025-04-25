@@ -28,28 +28,31 @@ class IsarFavoritesDatasource extends FavoritesDatasource {
   Future<List<FavoriteMovie>> getFavorites({int page = 1, int pageSize = 20}) async {
     final offset = (page - 1) * pageSize;
     final isar = await isarDb;
-    final movies = isar.favoriteMovies.where().offset(offset).limit(pageSize).findAll();
+    final movies =
+        isar.favoriteMovies.where().sortByTitle().offset(offset).limit(pageSize).findAll();
     return movies;
   }
 
   @override
   Future<bool> isFavorite(int movieId) async {
-    final isar = await isarDb;    
+    final isar = await isarDb;
     final cnt = await isar.favoriteMovies.filter().movieIdEqualTo(movieId).count();
     return cnt > 0;
   }
 
   @override
-  Future<void> toogleFavorite(FavoriteMovie favoriteMovie) async {
+  Future<bool> toogleFavorite(FavoriteMovie favoriteMovie) async {
     final isar = await isarDb;
-    final FavoriteMovie? current = await isar.favoriteMovies.filter()
-      .movieIdEqualTo(favoriteMovie.movieId)
-      .findFirst();
+    final FavoriteMovie? current =
+        await isar.favoriteMovies.filter().movieIdEqualTo(favoriteMovie.movieId).findFirst();
 
+    // If the movie is already in the favorites, remove it
     if (current != null) {
-      await isar.writeTxn(() =>  isar.favoriteMovies.delete(current.id!));
-    } else {
-        await isar.writeTxn(() =>  isar.favoriteMovies.put(favoriteMovie));
+      await isar.writeTxn(() => isar.favoriteMovies.delete(current.id!));
+      return false;
     }
+    // Add new favorite movie
+    await isar.writeTxn(() => isar.favoriteMovies.put(favoriteMovie));
+    return true;
   }
 }

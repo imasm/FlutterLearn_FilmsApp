@@ -70,7 +70,7 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
   }
 
   @override
-  Future<void> toogleFavorite(FavoriteMovie favoriteMovie) async {
+  Future<bool> toogleFavorite(FavoriteMovie favoriteMovie) async {
     final db = await database;
     final current = await db.query(
       'favorites',
@@ -83,11 +83,13 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
         where: 'movieId = ?',
         whereArgs: [favoriteMovie.movieId],
       );
+      return false;
     } else {
       await db.insert(
         'favorites',
         FavoriteMovieMapper.toMap(favoriteMovie),
       );
+      return true;
     }
   }
 }

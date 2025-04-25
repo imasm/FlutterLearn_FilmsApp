@@ -15,7 +15,7 @@ class FavoritesRepositoryImpl extends FavoritesRepository {
   }
 
   @override
-  Future<void> toogleFavorite(FavoriteMovie favoriteMovie) {
-  return favoritesDatasource.toogleFavorite(favoriteMovie);
-  }  
+  Future<bool> toogleFavorite(FavoriteMovie favoriteMovie) {
+    return favoritesDatasource.toogleFavorite(favoriteMovie);
+  }
 }

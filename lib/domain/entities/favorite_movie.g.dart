@@ -43,7 +43,34 @@ const FavoriteMovieSchema = CollectionSchema(
   deserialize: _favoriteMovieDeserialize,
   deserializeProp: _favoriteMovieDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'movieId': IndexSchema(
+      id: -1138826636860436442,
+      name: r'movieId',
+      unique: true,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'movieId',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
+    r'title': IndexSchema(
+      id: -7636685945352118059,
+      name: r'title',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'title',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _favoriteMovieGetId,
@@ -84,11 +111,11 @@ FavoriteMovie _favoriteMovieDeserialize(
 ) {
   final object = FavoriteMovie(
     backdropPath: reader.readString(offsets[0]),
+    id: id,
     movieId: reader.readLong(offsets[1]),
     posterPath: reader.readString(offsets[2]),
     title: reader.readString(offsets[3]),
   );
-  object.id = id;
   return object;
 }
 
@@ -125,11 +152,74 @@ void _favoriteMovieAttach(
   object.id = id;
 }
 
+extension FavoriteMovieByIndex on IsarCollection<FavoriteMovie> {
+  Future<FavoriteMovie?> getByMovieId(int movieId) {
+    return getByIndex(r'movieId', [movieId]);
+  }
+
+  FavoriteMovie? getByMovieIdSync(int movieId) {
+    return getByIndexSync(r'movieId', [movieId]);
+  }
+
+  Future<bool> deleteByMovieId(int movieId) {
+    return deleteByIndex(r'movieId', [movieId]);
+  }
+
+  bool deleteByMovieIdSync(int movieId) {
+    return deleteByIndexSync(r'movieId', [movieId]);
+  }
+
+  Future<List<FavoriteMovie?>> getAllByMovieId(List<int> movieIdValues) {
+    final values = movieIdValues.map((e) => [e]).toList();
+    return getAllByIndex(r'movieId', values);
+  }
+
+  List<FavoriteMovie?> getAllByMovieIdSync(List<int> movieIdValues) {
+    final values = movieIdValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'movieId', values);
+  }
+
+  Future<int> deleteAllByMovieId(List<int> movieIdValues) {
+    final values = movieIdValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'movieId', values);
+  }
+
+  int deleteAllByMovieIdSync(List<int> movieIdValues) {
+    final values = movieIdValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'movieId', values);
+  }
+
+  Future<Id> putByMovieId(FavoriteMovie object) {
+    return putByIndex(r'movieId', object);
+  }
+
+  Id putByMovieIdSync(FavoriteMovie object, {bool saveLinks = true}) {
+    return putByIndexSync(r'movieId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByMovieId(List<FavoriteMovie> objects) {
+    return putAllByIndex(r'movieId', objects);
+  }
+
+  List<Id> putAllByMovieIdSync(List<FavoriteMovie> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'movieId', objects, saveLinks: saveLinks);
+  }
+}
+
 extension FavoriteMovieQueryWhereSort
     on QueryBuilder<FavoriteMovie, FavoriteMovie, QWhere> {
   QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhere> anyMovieId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'movieId'),
+      );
     });
   }
 }
@@ -202,6 +292,142 @@ extension FavoriteMovieQueryWhere
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> movieIdEqualTo(
+      int movieId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'movieId',
+        value: [movieId],
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause>
+      movieIdNotEqualTo(int movieId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'movieId',
+              lower: [],
+              upper: [movieId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'movieId',
+              lower: [movieId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'movieId',
+              lower: [movieId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'movieId',
+              lower: [],
+              upper: [movieId],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause>
+      movieIdGreaterThan(
+    int movieId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'movieId',
+        lower: [movieId],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> movieIdLessThan(
+    int movieId, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'movieId',
+        lower: [],
+        upper: [movieId],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> movieIdBetween(
+    int lowerMovieId,
+    int upperMovieId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'movieId',
+        lower: [lowerMovieId],
+        includeLower: includeLower,
+        upper: [upperMovieId],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> titleEqualTo(
+      String title) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'title',
+        value: [title],
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> titleNotEqualTo(
+      String title) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [],
+              upper: [title],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [title],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [title],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [],
+              upper: [title],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }

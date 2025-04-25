@@ -88,7 +88,11 @@ class _MoviePosterAppBar extends ConsumerWidget {
                 posterPath: movie.posterPath,
                 backdropPath: movie.backdropPath);
 
-            await ref.watch(favoritesRepositoryProvider).toogleFavorite(fav);
+            // Afegeix o treu la pel·lícula del repositori de favorits
+            //await ref.watch(favoritesRepositoryProvider).toogleFavorite(fav);
+
+            // Afegeix o treu la pel·lícula de la llista de favorits
+            await ref.read(favoritesProvider.notifier).toggleFavorite(fav);
             ref.invalidate(isFavoriteProvider(movie.id));
           },
         )
