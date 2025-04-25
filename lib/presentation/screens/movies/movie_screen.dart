@@ -77,7 +77,7 @@ class _MoviePosterAppBar extends ConsumerWidget {
                     : const Icon(Icons.favorite_border);
               },
               error: (error, stack) => throw Exception("Error loading favorite"),
-              loading: () => const Icon(Icons.favorite_border)),
+              loading: () => SizedBox.shrink()),
 
           // Es fa async perque necessitem que es completi la crida a tooogleFavorite
           // abans de refrescar el provider
