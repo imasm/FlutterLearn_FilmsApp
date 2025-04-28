@@ -29,7 +29,7 @@ class IsarFavoritesDatasource extends FavoritesDatasource {
     final offset = (page - 1) * pageSize;
     final isar = await isarDb;
     final movies =
-        isar.favoriteMovies.where().sortByTitle().offset(offset).limit(pageSize).findAll();
+        isar.favoriteMovies.where().sortByCreatedAtDesc().offset(offset).limit(pageSize).findAll();
     return movies;
   }
 

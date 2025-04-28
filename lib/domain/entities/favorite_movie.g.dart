@@ -22,18 +22,23 @@ const FavoriteMovieSchema = CollectionSchema(
       name: r'backdropPath',
       type: IsarType.string,
     ),
-    r'movieId': PropertySchema(
+    r'createdAt': PropertySchema(
       id: 1,
+      name: r'createdAt',
+      type: IsarType.dateTime,
+    ),
+    r'movieId': PropertySchema(
+      id: 2,
       name: r'movieId',
       type: IsarType.long,
     ),
     r'posterPath': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'posterPath',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'title',
       type: IsarType.string,
     )
@@ -43,34 +48,7 @@ const FavoriteMovieSchema = CollectionSchema(
   deserialize: _favoriteMovieDeserialize,
   deserializeProp: _favoriteMovieDeserializeProp,
   idName: r'id',
-  indexes: {
-    r'movieId': IndexSchema(
-      id: -1138826636860436442,
-      name: r'movieId',
-      unique: true,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'movieId',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    ),
-    r'title': IndexSchema(
-      id: -7636685945352118059,
-      name: r'title',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'title',
-          type: IndexType.hash,
-          caseSensitive: true,
-        )
-      ],
-    )
-  },
+  indexes: {},
   links: {},
   embeddedSchemas: {},
   getId: _favoriteMovieGetId,
@@ -98,9 +76,10 @@ void _favoriteMovieSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.backdropPath);
-  writer.writeLong(offsets[1], object.movieId);
-  writer.writeString(offsets[2], object.posterPath);
-  writer.writeString(offsets[3], object.title);
+  writer.writeDateTime(offsets[1], object.createdAt);
+  writer.writeLong(offsets[2], object.movieId);
+  writer.writeString(offsets[3], object.posterPath);
+  writer.writeString(offsets[4], object.title);
 }
 
 FavoriteMovie _favoriteMovieDeserialize(
@@ -111,10 +90,11 @@ FavoriteMovie _favoriteMovieDeserialize(
 ) {
   final object = FavoriteMovie(
     backdropPath: reader.readString(offsets[0]),
+    createdAt: reader.readDateTime(offsets[1]),
     id: id,
-    movieId: reader.readLong(offsets[1]),
-    posterPath: reader.readString(offsets[2]),
-    title: reader.readString(offsets[3]),
+    movieId: reader.readLong(offsets[2]),
+    posterPath: reader.readString(offsets[3]),
+    title: reader.readString(offsets[4]),
   );
   return object;
 }
@@ -129,10 +109,12 @@ P _favoriteMovieDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -152,74 +134,11 @@ void _favoriteMovieAttach(
   object.id = id;
 }
 
-extension FavoriteMovieByIndex on IsarCollection<FavoriteMovie> {
-  Future<FavoriteMovie?> getByMovieId(int movieId) {
-    return getByIndex(r'movieId', [movieId]);
-  }
-
-  FavoriteMovie? getByMovieIdSync(int movieId) {
-    return getByIndexSync(r'movieId', [movieId]);
-  }
-
-  Future<bool> deleteByMovieId(int movieId) {
-    return deleteByIndex(r'movieId', [movieId]);
-  }
-
-  bool deleteByMovieIdSync(int movieId) {
-    return deleteByIndexSync(r'movieId', [movieId]);
-  }
-
-  Future<List<FavoriteMovie?>> getAllByMovieId(List<int> movieIdValues) {
-    final values = movieIdValues.map((e) => [e]).toList();
-    return getAllByIndex(r'movieId', values);
-  }
-
-  List<FavoriteMovie?> getAllByMovieIdSync(List<int> movieIdValues) {
-    final values = movieIdValues.map((e) => [e]).toList();
-    return getAllByIndexSync(r'movieId', values);
-  }
-
-  Future<int> deleteAllByMovieId(List<int> movieIdValues) {
-    final values = movieIdValues.map((e) => [e]).toList();
-    return deleteAllByIndex(r'movieId', values);
-  }
-
-  int deleteAllByMovieIdSync(List<int> movieIdValues) {
-    final values = movieIdValues.map((e) => [e]).toList();
-    return deleteAllByIndexSync(r'movieId', values);
-  }
-
-  Future<Id> putByMovieId(FavoriteMovie object) {
-    return putByIndex(r'movieId', object);
-  }
-
-  Id putByMovieIdSync(FavoriteMovie object, {bool saveLinks = true}) {
-    return putByIndexSync(r'movieId', object, saveLinks: saveLinks);
-  }
-
-  Future<List<Id>> putAllByMovieId(List<FavoriteMovie> objects) {
-    return putAllByIndex(r'movieId', objects);
-  }
-
-  List<Id> putAllByMovieIdSync(List<FavoriteMovie> objects,
-      {bool saveLinks = true}) {
-    return putAllByIndexSync(r'movieId', objects, saveLinks: saveLinks);
-  }
-}
-
 extension FavoriteMovieQueryWhereSort
     on QueryBuilder<FavoriteMovie, FavoriteMovie, QWhere> {
   QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhere> anyMovieId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'movieId'),
-      );
     });
   }
 }
@@ -292,142 +211,6 @@ extension FavoriteMovieQueryWhere
         upper: upperId,
         includeUpper: includeUpper,
       ));
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> movieIdEqualTo(
-      int movieId) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'movieId',
-        value: [movieId],
-      ));
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause>
-      movieIdNotEqualTo(int movieId) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'movieId',
-              lower: [],
-              upper: [movieId],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'movieId',
-              lower: [movieId],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'movieId',
-              lower: [movieId],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'movieId',
-              lower: [],
-              upper: [movieId],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause>
-      movieIdGreaterThan(
-    int movieId, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'movieId',
-        lower: [movieId],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> movieIdLessThan(
-    int movieId, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'movieId',
-        lower: [],
-        upper: [movieId],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> movieIdBetween(
-    int lowerMovieId,
-    int upperMovieId, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'movieId',
-        lower: [lowerMovieId],
-        includeLower: includeLower,
-        upper: [upperMovieId],
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> titleEqualTo(
-      String title) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'title',
-        value: [title],
-      ));
-    });
-  }
-
-  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterWhereClause> titleNotEqualTo(
-      String title) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'title',
-              lower: [],
-              upper: [title],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'title',
-              lower: [title],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'title',
-              lower: [title],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'title',
-              lower: [],
-              upper: [title],
-              includeUpper: false,
-            ));
-      }
     });
   }
 }
@@ -566,6 +349,62 @@ extension FavoriteMovieQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'backdropPath',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterFilterCondition>
+      createdAtEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createdAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterFilterCondition>
+      createdAtGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'createdAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterFilterCondition>
+      createdAtLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'createdAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterFilterCondition>
+      createdAtBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'createdAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -992,6 +831,19 @@ extension FavoriteMovieQuerySortBy
     });
   }
 
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterSortBy> sortByCreatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterSortBy>
+      sortByCreatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterSortBy> sortByMovieId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'movieId', Sort.asc);
@@ -1043,6 +895,19 @@ extension FavoriteMovieQuerySortThenBy
       thenByBackdropPathDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'backdropPath', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterSortBy> thenByCreatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QAfterSortBy>
+      thenByCreatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.desc);
     });
   }
 
@@ -1105,6 +970,12 @@ extension FavoriteMovieQueryWhereDistinct
     });
   }
 
+  QueryBuilder<FavoriteMovie, FavoriteMovie, QDistinct> distinctByCreatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createdAt');
+    });
+  }
+
   QueryBuilder<FavoriteMovie, FavoriteMovie, QDistinct> distinctByMovieId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'movieId');
@@ -1137,6 +1008,12 @@ extension FavoriteMovieQueryProperty
   QueryBuilder<FavoriteMovie, String, QQueryOperations> backdropPathProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'backdropPath');
+    });
+  }
+
+  QueryBuilder<FavoriteMovie, DateTime, QQueryOperations> createdAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createdAt');
     });
   }
 

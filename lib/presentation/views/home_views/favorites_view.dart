@@ -33,6 +33,12 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
   Widget build(BuildContext context) {
     final favoriteMovies = ref.watch(favoritesProvider);
     final moviesList = favoriteMovies.values.toList();
+
+    // order by createdAt (added to favorites) descending
+    moviesList.sort((a, b) {
+      return -a.createdAt.compareTo(b.createdAt);
+    });
+
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('Favorites'),

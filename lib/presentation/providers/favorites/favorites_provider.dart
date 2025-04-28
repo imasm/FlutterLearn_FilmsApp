@@ -2,8 +2,7 @@ import 'package:cinemapedia/domain/domain.dart';
 import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final favoritesProvider =
-    StateNotifierProvider.autoDispose<FavoritesNotifier, Map<int, FavoriteMovie>>((ref) {
+final favoritesProvider = StateNotifierProvider<FavoritesNotifier, Map<int, FavoriteMovie>>((ref) {
   final repository = ref.watch(favoritesRepositoryProvider);
   return FavoritesNotifier(favoritesRepository: repository);
 });
@@ -16,14 +15,17 @@ class FavoritesNotifier extends StateNotifier<Map<int, FavoriteMovie>> {
 
   Future<int> loadNextPage() async {
     final favorites = await favoritesRepository.getFavorites(page: page);
-    if (favorites.isNotEmpty) {
-      page++;
-      Map<int, FavoriteMovie> tempMap = {};
-      for (var e in favorites) {
-        tempMap[e.movieId] = e;
-      }
-      state = {...state, ...tempMap};
+    if (favorites.isEmpty) {
+      return 0;
     }
+
+    Map<int, FavoriteMovie> favMap = {};
+    for (var favorite in favorites) {
+      favMap[favorite.movieId] = favorite;
+    }
+
+    page++;
+    state = {...state, ...favMap};
     return favorites.length;
   }
 
@@ -31,7 +33,8 @@ class FavoritesNotifier extends StateNotifier<Map<int, FavoriteMovie>> {
     bool isFavorite = await favoritesRepository.toogleFavorite(movie);
     bool isInState = state.containsKey(movie.movieId);
 
-    if (isInState && !isFavorite) {
+    if (isInState & !isFavorite) {
+      // Treure
       state.remove(movie.movieId);
       state = {...state};
       return;

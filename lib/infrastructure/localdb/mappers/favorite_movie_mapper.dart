@@ -7,6 +7,9 @@ class FavoriteMovieMapper {
         title: favMap['title'] as String,
         backdropPath: favMap['backdropPath'] as String,
         posterPath: favMap['posterPath'] as String,
+        createdAt: favMap['createdAt'] != null
+            ? DateTime.parse(favMap['createdAt'] as String).toUtc()
+            : DateTime.now().toUtc(),
       );
 
   static Map<String, Object?> toMap(FavoriteMovie src) => {
@@ -15,5 +18,6 @@ class FavoriteMovieMapper {
         'title': src.title,
         'backdropPath': src.backdropPath,
         'posterPath': src.posterPath,
+        'createdAt': src.createdAt.toIso8601String(),
       };
 }

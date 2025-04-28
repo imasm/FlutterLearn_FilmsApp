@@ -38,7 +38,16 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         return db.execute(
-          'CREATE TABLE favorites(id INTEGER PRIMARY KEY, movieId INTEGER, title TEXT, backdropPath TEXT, posterPath TEXT)',
+          '''CREATE TABLE favorites(
+              id INTEGER PRIMARY KEY, 
+              movieId INTEGER, 
+              title TEXT, 
+              backdropPath TEXT, 
+              posterPath TEXT,
+              createdAt TEXT,
+              UNIQUE(movieId) ON CONFLICT REPLACE,
+              INDEX idx_createdAt (createdAt)
+        ''',
         );
       },
       version: 1,

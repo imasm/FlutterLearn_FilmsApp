@@ -82,11 +82,7 @@ class _MoviePosterAppBar extends ConsumerWidget {
           // Es fa async perque necessitem que es completi la crida a tooogleFavorite
           // abans de refrescar el provider
           onPressed: () async {
-            FavoriteMovie fav = FavoriteMovie(
-                movieId: movie.id,
-                title: movie.title,
-                posterPath: movie.posterPath,
-                backdropPath: movie.backdropPath);
+            FavoriteMovie fav = FavoriteMovie.fromMovie(movie);
 
             // Afegeix o treu la pel·lícula del repositori de favorits
             //await ref.watch(favoritesRepositoryProvider).toogleFavorite(fav);
