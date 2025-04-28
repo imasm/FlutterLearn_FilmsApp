@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:cinemapedia/config/constants/environment.dart';
-import 'package:cinemapedia/domain/datasources/actors_datasource.dart';
-import 'package:cinemapedia/domain/entities/actor.dart';
-import '../themoviedb_mappers.dart';
+import 'package:cinemapedia/domain/domain.dart';
 import '../themoviedb_models.dart';
+import '../themoviedb_mappers.dart';
 
 
 class TheMovieDbActorsDatasource implements ActorsDatasource {

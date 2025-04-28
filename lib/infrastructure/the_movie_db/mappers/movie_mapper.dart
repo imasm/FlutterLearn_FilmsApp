@@ -1,4 +1,4 @@
-import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/domain/domain.dart';
 import '../themoviedb_models.dart';
 
 class MovieMapper {
