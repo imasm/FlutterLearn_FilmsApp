@@ -35,6 +35,7 @@ class _MoviesMasonryState extends State<MoviesMasonry> {
   @override
   Widget build(BuildContext context) {
     final favs = widget.favorites;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: MasonryGridView.count(

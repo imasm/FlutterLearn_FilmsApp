@@ -10,8 +10,8 @@ class MoviePosterLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInUp(
-      duration: const Duration(milliseconds: 200),
+    return FadeIn(
+      duration: const Duration(milliseconds: 300),
       child: GestureDetector(
         onTap: () {
           // Handle movie tap
