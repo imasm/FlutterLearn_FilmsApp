@@ -65,7 +65,7 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
       // appBar: AppBar(
       //   title: const Text('Favorites'),
       // ),
-      body: MoviesMasonry(favorites: moviesList, loadNextPage: _loadNextPage),
+      body: FavoritesMoviesMasonry(favorites: moviesList, loadNextPage: _loadNextPage),
     );
   }
 }

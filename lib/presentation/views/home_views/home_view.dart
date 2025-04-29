@@ -15,7 +15,6 @@ class HomeViewState extends ConsumerState<HomeView> {
   void initState() {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-    ref.read(popularMoviesProvider.notifier).loadNextPage();
     ref.read(upcomingMoviesProvider.notifier).loadNextPage();
     ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
@@ -26,44 +25,37 @@ class HomeViewState extends ConsumerState<HomeView> {
     if (isLoading) return const FullScreenLoader();
 
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
-    final popularMovies = ref.watch(popularMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final slideMovies = ref.watch(moviesSlideshowProvider);
 
     return CustomScrollView(slivers: [
       const _HomeAppBar(),
-
       SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
         return Column(children: [
-
           MoviesSlideshow(movies: slideMovies),
 
+          // Now Playing movies
           MoviesHorizontalListview(
               movies: nowPlayingMovies,
               sectionTitle: 'En Cartellera',
               sectionSubtitle: "Dilluns 20",
               onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
 
+          // Upcoming movies
           MoviesHorizontalListview(
               movies: upcomingMovies,
               sectionTitle: 'Proximament',
               sectionSubtitle: "Aquest mes",
               onNextPage: () => ref.read(upcomingMoviesProvider.notifier).loadNextPage()),
 
-          MoviesHorizontalListview(
-              movies: popularMovies,
-              sectionTitle: 'Populars',
-              //subtitle: "",
-              onNextPage: () => ref.read(popularMoviesProvider.notifier).loadNextPage()),
-
+          //Top Rated movies
           MoviesHorizontalListview(
               movies: topRatedMovies,
               sectionTitle: 'Més valorades',
               sectionSubtitle: "De sempre",
               onNextPage: () => ref.read(topRatedMoviesProvider.notifier).loadNextPage()),
-
           const SizedBox(height: 20)
         ]);
       }, childCount: 1))

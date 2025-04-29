@@ -26,8 +26,8 @@ class CustomNavigationBar extends StatelessWidget {
         selectedIndex: getCurrentIndex(context),
         onDestinationSelected: (value) => onItemSelected(context, value),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_max), label: 'Inici'),
-          NavigationDestination(icon: Icon(Icons.label_outline), label: 'Categories'),
+          NavigationDestination(icon: Icon(Icons.home_max_outlined), label: 'Inici'),
+          NavigationDestination(icon: Icon(Icons.trending_up), label: 'Populars'),
           NavigationDestination(icon: Icon(Icons.favorite_outline), label: 'Preferits'),
         ]);
   }

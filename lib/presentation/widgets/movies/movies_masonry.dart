@@ -3,17 +3,17 @@ import 'package:cinemapedia/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class FavoritesMoviesMasonry extends StatefulWidget {
-  final List<FavoriteMovie> favorites;
+class MoviesMasonry extends StatefulWidget {
+  final List<Movie> favorites;
   final VoidCallback loadNextPage;
 
-  const FavoritesMoviesMasonry({super.key, required this.favorites, required this.loadNextPage});
+  const MoviesMasonry({super.key, required this.favorites, required this.loadNextPage});
 
   @override
-  State<FavoritesMoviesMasonry> createState() => _FavoritesMoviesMasonryState();
+  State<MoviesMasonry> createState() => _MoviesMasonryState();
 }
 
-class _FavoritesMoviesMasonryState extends State<FavoritesMoviesMasonry> {
+class _MoviesMasonryState extends State<MoviesMasonry> {
   final scrollController = ScrollController();
 
   @override
@@ -53,7 +53,7 @@ class _FavoritesMoviesMasonryState extends State<FavoritesMoviesMasonry> {
                   height: 20,
                 ),
                 MoviePosterLink(
-                  movieId: favoriteMovie.movieId,
+                  movieId: favoriteMovie.id,
                   posterPath: favoriteMovie.posterPath,
                 ),
               ],
@@ -61,7 +61,7 @@ class _FavoritesMoviesMasonryState extends State<FavoritesMoviesMasonry> {
           }
 
           return MoviePosterLink(
-            movieId: favoriteMovie.movieId,
+            movieId: favoriteMovie.id,
             posterPath: favoriteMovie.posterPath,
           );
         },
