@@ -1,6 +1,6 @@
 # MyMovies
 
-Exemple del curs de [Flutter - MÛvil: De cero a experto](https://www.udemy.com/course/flutter-cero-a-experto/) de Udemy
+Exemple del curs de [Flutter - M√≥vil: De cero a experto](https://www.udemy.com/course/flutter-cero-a-experto/) de Udemy
 
 ## Contingut
 
@@ -11,9 +11,15 @@ Exemple del curs de [Flutter - MÛvil: De cero a experto](https://www.udemy.com/c
 
 
 # TheMovieDb Key
-* Anar a la p‡gina [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) per tenir la clau de l'API
+* Anar a la p√†gina [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) per tenir la clau de l'API
 * Copiar el fitxer .env.template a .env
-* Editar el fitxer per posar la clau prÚpia.
+* Editar el fitxer per posar la clau pr√≤pia.
 
 # Isar DB
-* DesprÈs de modificar les entitat o anotacions cal executar el generador de codi: ```dart run build_runner build```
+* Despr√©s de modificar les entitat o anotacions cal executar el generador de codi: ```dart run build_runner build```
+
+# Coses pendents:
+* Control d'errors
+* Loading indicators per cada secci√≥ d'imatges
+* Titols al primer slider horitzontal
+* Millora del disseny dels indicadors de popularitat
