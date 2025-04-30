@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cinemapedia/domain/domain.dart';
+import 'package:my_movies/domain/domain.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -34,11 +34,10 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
 
     final dir = await _getDatabasePath();
     final db = await openDatabase(
-      join(dir, 'cinemapedia.db'),
+      join(dir, 'my_movies.db'),
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
-        return db.execute(
-          '''CREATE TABLE favorites(
+        return db.execute('''CREATE TABLE favorites(
               id INTEGER PRIMARY KEY, 
               movieId INTEGER, 
               title TEXT, 
@@ -47,8 +46,7 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
               createdAt TEXT,
               UNIQUE(movieId) ON CONFLICT REPLACE,
               INDEX idx_createdAt (createdAt)
-        ''',
-        );
+        ''');
       },
       version: 1,
     );
@@ -72,8 +70,10 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
   @override
   Future<bool> isFavorite(int movieId) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.rawQuery('select count(*) from favorites where movieId = ?', [movieId]);
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+      'select count(*) from favorites where movieId = ?',
+      [movieId],
+    );
     final count = Sqflite.firstIntValue(maps) ?? 0;
     return count > 0;
   }
@@ -87,17 +87,10 @@ class SqliteFavoritesDatasource extends FavoritesDatasource {
       whereArgs: [favoriteMovie.movieId],
     );
     if (current.isNotEmpty) {
-      await db.delete(
-        'favorites',
-        where: 'movieId = ?',
-        whereArgs: [favoriteMovie.movieId],
-      );
+      await db.delete('favorites', where: 'movieId = ?', whereArgs: [favoriteMovie.movieId]);
       return false;
     } else {
-      await db.insert(
-        'favorites',
-        FavoriteMovieMapper.toMap(favoriteMovie),
-      );
+      await db.insert('favorites', FavoriteMovieMapper.toMap(favoriteMovie));
       return true;
     }
   }

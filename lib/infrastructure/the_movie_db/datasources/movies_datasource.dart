@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:cinemapedia/config/constants/environment.dart';
-import 'package:cinemapedia/domain/domain.dart';
+import 'package:my_movies/config/constants/environment.dart';
+import 'package:my_movies/domain/domain.dart';
 import '../themoviedb_mappers.dart';
 import '../themoviedb_models.dart';
 
 class TheMovieDbMoviesDatasource implements MoviesDatasource {
-  final dio = Dio(BaseOptions(
+  final dio = Dio(
+    BaseOptions(
       baseUrl: 'https://api.themoviedb.org/3',
-      queryParameters: {'api_key': Environment.theMovieDbKey, 'language': 'es-ES', 'region': 'ES'}));
+      queryParameters: {'api_key': Environment.theMovieDbKey, 'language': 'es-ES', 'region': 'ES'},
+    ),
+  );
 
   Future<List<Movie>> _getMoviesFromResponse(Response<dynamic> httpResponse) async {
     final List<Movie> movies = [];

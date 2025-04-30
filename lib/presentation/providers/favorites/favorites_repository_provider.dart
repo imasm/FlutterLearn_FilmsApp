@@ -1,8 +1,8 @@
-import 'package:cinemapedia/config/constants/environment.dart';
-import 'package:cinemapedia/domain/domain.dart';
-import 'package:cinemapedia/infrastructure/localdb/datasources/isar_favorites_datasource.dart';
-import 'package:cinemapedia/infrastructure/localdb/datasources/sqlite_favorites_datasource.dart';
-import 'package:cinemapedia/infrastructure/repositories/favorites_repository_impl.dart';
+import 'package:my_movies/config/constants/environment.dart';
+import 'package:my_movies/domain/domain.dart';
+import 'package:my_movies/infrastructure/localdb/datasources/isar_favorites_datasource.dart';
+import 'package:my_movies/infrastructure/localdb/datasources/sqlite_favorites_datasource.dart';
+import 'package:my_movies/infrastructure/repositories/favorites_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final favoritesRepositoryProvider = StateProvider<FavoritesRepository>((ref) {

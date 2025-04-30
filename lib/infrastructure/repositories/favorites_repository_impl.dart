@@ -1,4 +1,4 @@
-import 'package:cinemapedia/domain/domain.dart';
+import 'package:my_movies/domain/domain.dart';
 
 class FavoritesRepositoryImpl extends FavoritesRepository {
   final FavoritesDatasource favoritesDatasource;

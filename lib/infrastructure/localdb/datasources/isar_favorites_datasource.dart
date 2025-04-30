@@ -1,9 +1,9 @@
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:cinemapedia/domain/domain.dart';
+import 'package:my_movies/domain/domain.dart';
 
 class IsarFavoritesDatasource extends FavoritesDatasource {
-  static const String dbName = "cinemapediadb";
+  static const String dbName = "my_moviesdb";
   late Future<Isar> isarDb;
 
   IsarFavoritesDatasource() {

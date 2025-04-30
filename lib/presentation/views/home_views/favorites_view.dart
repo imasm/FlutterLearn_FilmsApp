@@ -1,5 +1,5 @@
-import 'package:cinemapedia/presentation/providers/providers.dart';
-import 'package:cinemapedia/presentation/widgets/movies/favorite_movies_masonry.dart';
+import 'package:my_movies/presentation/providers/providers.dart';
+import 'package:my_movies/presentation/widgets/movies/favorite_movies_masonry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -43,12 +43,16 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
           children: [
             Icon(Icons.favorite_outline, size: 60, color: colors.primary),
             const SizedBox(height: 10),
-            Text('No tens cap pel·licula preverida encara!',
-                style: TextStyle(fontSize: 30, color: colors.primary), textAlign: TextAlign.center),
+            Text(
+              'No tens cap pel·licula preverida encara!',
+              style: TextStyle(fontSize: 30, color: colors.primary),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 10),
             FilledButton.tonal(
-                onPressed: () => context.go('/movies'),
-                child: const Text('Torna a la pàgina principal')),
+              onPressed: () => context.go('/movies'),
+              child: const Text('Torna a la pàgina principal'),
+            ),
           ],
         ),
       );

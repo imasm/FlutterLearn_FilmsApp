@@ -1,5 +1,5 @@
-import 'package:cinemapedia/presentation/providers/providers.dart';
-import 'package:cinemapedia/presentation/widgets/widgets.dart';
+import 'package:my_movies/presentation/providers/providers.dart';
+import 'package:my_movies/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,37 +29,45 @@ class HomeViewState extends ConsumerState<HomeView> {
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final slideMovies = ref.watch(moviesSlideshowProvider);
 
-    return CustomScrollView(slivers: [
-      const _HomeAppBar(),
-      SliverList(
+    return CustomScrollView(
+      slivers: [
+        const _HomeAppBar(),
+        SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
-        return Column(children: [
-          MoviesSlideshow(movies: slideMovies),
+            return Column(
+              children: [
+                MoviesSlideshow(movies: slideMovies),
 
-          // Now Playing movies
-          MoviesHorizontalListview(
-              movies: nowPlayingMovies,
-              sectionTitle: 'En Cartellera',
-              sectionSubtitle: "Dilluns 20",
-              onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage()),
+                // Now Playing movies
+                MoviesHorizontalListview(
+                  movies: nowPlayingMovies,
+                  sectionTitle: 'En Cartellera',
+                  sectionSubtitle: "Dilluns 20",
+                  onNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+                ),
 
-          // Upcoming movies
-          MoviesHorizontalListview(
-              movies: upcomingMovies,
-              sectionTitle: 'Proximament',
-              sectionSubtitle: "Aquest mes",
-              onNextPage: () => ref.read(upcomingMoviesProvider.notifier).loadNextPage()),
+                // Upcoming movies
+                MoviesHorizontalListview(
+                  movies: upcomingMovies,
+                  sectionTitle: 'Proximament',
+                  sectionSubtitle: "Aquest mes",
+                  onNextPage: () => ref.read(upcomingMoviesProvider.notifier).loadNextPage(),
+                ),
 
-          //Top Rated movies
-          MoviesHorizontalListview(
-              movies: topRatedMovies,
-              sectionTitle: 'Més valorades',
-              sectionSubtitle: "De sempre",
-              onNextPage: () => ref.read(topRatedMoviesProvider.notifier).loadNextPage()),
-          const SizedBox(height: 20)
-        ]);
-      }, childCount: 1))
-    ]);
+                //Top Rated movies
+                MoviesHorizontalListview(
+                  movies: topRatedMovies,
+                  sectionTitle: 'Més valorades',
+                  sectionSubtitle: "De sempre",
+                  onNextPage: () => ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
+                ),
+                const SizedBox(height: 20),
+              ],
+            );
+          }, childCount: 1),
+        ),
+      ],
+    );
   }
 }
 
@@ -71,14 +79,12 @@ class _HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SliverAppBar(
-        floating: true,
-        flexibleSpace: FlexibleSpaceBar(
-          title: CustomAppbar(),
-          centerTitle: false,
-          titlePadding: EdgeInsetsDirectional.only(
-            start: 0.0,
-            bottom: 16.0,
-          ),
-        ));
+      floating: true,
+      flexibleSpace: FlexibleSpaceBar(
+        title: CustomAppbar(),
+        centerTitle: false,
+        titlePadding: EdgeInsetsDirectional.only(start: 0.0, bottom: 16.0),
+      ),
+    );
   }
 }

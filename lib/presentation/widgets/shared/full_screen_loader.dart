@@ -14,8 +14,11 @@ class FullScreenLoader extends StatelessWidget {
       "Ara sí ...",
     ];
 
-    return Stream<String>.periodic(const Duration(milliseconds: 1200), (x) => messages[x % messages.length])
-        .take(messages.length);
+    return Stream<String>.periodic(
+      const Duration(milliseconds: 1200),
+      (x) => messages[x % messages.length],
+    );
+    //.take(messages.length);
   }
 
   @override
@@ -26,14 +29,15 @@ class FullScreenLoader extends StatelessWidget {
         children: [
           const Text('Carregant ...'),
           const SizedBox(height: 10),
-          const CircularProgressIndicator(
-            strokeWidth: 2,
-          ),
+          const CircularProgressIndicator(strokeWidth: 2),
           const SizedBox(height: 10),
-          StreamBuilder(stream: getLoadingMessages(), builder: (context, snapshot) {
-            if (!snapshot.hasData) return const SizedBox();
-            return Text(snapshot.data ?? '');
-          })
+          StreamBuilder(
+            stream: getLoadingMessages(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const SizedBox();
+              return Text(snapshot.data ?? '');
+            },
+          ),
         ],
       ),
     );

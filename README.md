@@ -1,6 +1,6 @@
-# Cinemapedia
+# MyMovies
 
-Exemple del curs de [Flutter - M√≥vil: De cero a experto](https://www.udemy.com/course/flutter-cero-a-experto/) de Udemy
+Exemple del curs de [Flutter - MÛvil: De cero a experto](https://www.udemy.com/course/flutter-cero-a-experto/) de Udemy
 
 ## Contingut
 
@@ -11,9 +11,9 @@ Exemple del curs de [Flutter - M√≥vil: De cero a experto](https://www.udemy.com/
 
 
 # TheMovieDb Key
-* Anar a la p√†gina [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) per tenir la clau de l'API
+* Anar a la p‡gina [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) per tenir la clau de l'API
 * Copiar el fitxer .env.template a .env
-* Editar el fitxer per posar la clau pr√≤pia.
+* Editar el fitxer per posar la clau prÚpia.
 
 # Isar DB
-* Despr√©s de modificar les entitat o anotacions cal executar el generador de codi: ```dart run build_runner build```
+* DesprÈs de modificar les entitat o anotacions cal executar el generador de codi: ```dart run build_runner build```

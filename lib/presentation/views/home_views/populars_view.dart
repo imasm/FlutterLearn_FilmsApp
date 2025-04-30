@@ -1,6 +1,6 @@
-import 'package:cinemapedia/domain/domain.dart';
-import 'package:cinemapedia/presentation/providers/providers.dart';
-import 'package:cinemapedia/presentation/widgets/widgets.dart';
+import 'package:my_movies/domain/domain.dart';
+import 'package:my_movies/presentation/providers/providers.dart';
+import 'package:my_movies/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,6 +13,12 @@ class PopularsView extends ConsumerStatefulWidget {
 
 class _PopularsViewState extends ConsumerState<PopularsView> {
   @override
+  void initState() {
+    super.initState();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final List<Movie> popularMovies = ref.watch(popularMoviesProvider);
 
@@ -22,8 +28,9 @@ class _PopularsViewState extends ConsumerState<PopularsView> {
 
     return Scaffold(
       body: MoviesMasonry(
-          favorites: popularMovies,
-          loadNextPage: () => ref.read(popularMoviesProvider.notifier).loadNextPage()),
+        favorites: popularMovies,
+        loadNextPage: () => ref.read(popularMoviesProvider.notifier).loadNextPage(),
+      ),
     );
   }
 }

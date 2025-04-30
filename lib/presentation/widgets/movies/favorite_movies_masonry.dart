@@ -1,5 +1,5 @@
-import 'package:cinemapedia/domain/domain.dart';
-import 'package:cinemapedia/presentation/widgets/widgets.dart';
+import 'package:my_movies/domain/domain.dart';
+import 'package:my_movies/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -49,9 +49,7 @@ class _FavoritesMoviesMasonryState extends State<FavoritesMoviesMasonry> {
           if (index == 1) {
             return Column(
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 MoviePosterLink(
                   movieId: favoriteMovie.movieId,
                   posterPath: favoriteMovie.posterPath,

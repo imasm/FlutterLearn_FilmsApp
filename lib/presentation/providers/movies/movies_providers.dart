@@ -1,5 +1,5 @@
-import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/presentation/providers/movies/movies_repository_provider.dart';
+import 'package:my_movies/domain/entities/movie.dart';
+import 'package:my_movies/presentation/providers/movies/movies_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final nowPlayingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
@@ -16,7 +16,6 @@ final topRatedMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>
   final moviesRepository = ref.watch(moviesRepositoryProvider);
   return MoviesNotifier(moviesCallback: moviesRepository.getTopRated);
 });
-
 
 final upcomingMoviesProvider = StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
   final moviesRepository = ref.watch(moviesRepositoryProvider);

@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemapedia/domain/domain.dart';
-import 'package:cinemapedia/presentation/providers/providers.dart';
-import 'package:cinemapedia/presentation/widgets/widgets.dart';
+import 'package:my_movies/domain/domain.dart';
+import 'package:my_movies/presentation/providers/providers.dart';
+import 'package:my_movies/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,16 +37,19 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
     }
 
     return Scaffold(
-        body: CustomScrollView(
-      physics: const ClampingScrollPhysics(),
-      slivers: [
-        _MoviePosterAppBar(movie: currentMovie),
-        SliverList(
+      body: CustomScrollView(
+        physics: const ClampingScrollPhysics(),
+        slivers: [
+          _MoviePosterAppBar(movie: currentMovie),
+          SliverList(
             delegate: SliverChildBuilderDelegate(
-                (context, index) => _MovieContent(movie: currentMovie),
-                childCount: 1))
-      ],
-    ));
+              (context, index) => _MovieContent(movie: currentMovie),
+              childCount: 1,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -71,13 +74,14 @@ class _MoviePosterAppBar extends ConsumerWidget {
         // Boto de favorit
         IconButton(
           icon: isFavoriteFuture.when(
-              data: (data) {
-                return data
-                    ? const Icon(Icons.favorite_rounded, color: Colors.red)
-                    : const Icon(Icons.favorite_border);
-              },
-              error: (error, stack) => throw Exception("Error loading favorite"),
-              loading: () => SizedBox.shrink()),
+            data: (data) {
+              return data
+                  ? const Icon(Icons.favorite_rounded, color: Colors.red)
+                  : const Icon(Icons.favorite_border);
+            },
+            error: (error, stack) => throw Exception("Error loading favorite"),
+            loading: () => SizedBox.shrink(),
+          ),
 
           // Es fa async perque necessitem que es completi la crida a tooogleFavorite
           // abans de refrescar el provider
@@ -91,17 +95,19 @@ class _MoviePosterAppBar extends ConsumerWidget {
             await ref.read(favoritesProvider.notifier).toggleFavorite(fav);
             ref.invalidate(isFavoriteProvider(movie.id));
           },
-        )
+        ),
       ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         title: _MoviePosterAppBarTitle(movieTitle: movie.title),
-        background: Stack(children: [
-          _MoviePosterAppBarImage(movie: movie),
-          const _MoviePosterAppBarTitleGradient(),
-          const _MoviePosterAppBarGoBackGradient(),
-          const _MoviePosterAppBarFavGradient()
-        ]),
+        background: Stack(
+          children: [
+            _MoviePosterAppBarImage(movie: movie),
+            const _MoviePosterAppBarTitleGradient(),
+            const _MoviePosterAppBarGoBackGradient(),
+            const _MoviePosterAppBarFavGradient(),
+          ],
+        ),
       ),
     );
   }
@@ -116,14 +122,15 @@ class _MoviePosterAppBarImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-        child: Image.network(
-      movie.posterPath,
-      fit: BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return FadeIn(child: child);
-        return const SizedBox();
-      },
-    ));
+      child: Image.network(
+        movie.posterPath,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return FadeIn(child: child);
+          return const SizedBox();
+        },
+      ),
+    );
   }
 }
 
@@ -149,10 +156,11 @@ class _MoviePosterAppBarTitleGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GradientLayer(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        stops: [0.7, 1],
-        colors: [Colors.transparent, Colors.black87]);
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: [0.7, 1],
+      colors: [Colors.transparent, Colors.black87],
+    );
   }
 }
 
@@ -163,10 +171,11 @@ class _MoviePosterAppBarGoBackGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GradientLayer(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        stops: [0, 0.3],
-        colors: [Colors.black87, Colors.transparent]);
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      stops: [0, 0.3],
+      colors: [Colors.black87, Colors.transparent],
+    );
   }
 }
 
@@ -177,10 +186,11 @@ class _MoviePosterAppBarFavGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GradientLayer(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        stops: [0, 0.3],
-        colors: [Colors.black54, Colors.transparent]);
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      stops: [0, 0.3],
+      colors: [Colors.black54, Colors.transparent],
+    );
   }
 }
 
@@ -195,16 +205,10 @@ class _MovieContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Details
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _MovieDetails(movie: movie),
-        ),
+        Padding(padding: const EdgeInsets.all(8.0), child: _MovieDetails(movie: movie)),
 
         // Genres
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: _MovieGenres(movie: movie),
-        ),
+        Padding(padding: const EdgeInsets.all(8.0), child: _MovieGenres(movie: movie)),
 
         _MovieActors(movieId: movie.id),
 
@@ -230,17 +234,14 @@ class _MovieDetails extends StatelessWidget {
       children: [
         _MovieDetailsPoster(posterPath: movie.posterPath, posterWitdh: deviceSize.width * 0.3),
         const SizedBox(width: 10),
-        _MovieDetailsText(movie: movie, width: (deviceSize.width - 40) * 0.7)
+        _MovieDetailsText(movie: movie, width: (deviceSize.width - 40) * 0.7),
       ],
     );
   }
 }
 
 class _MovieDetailsPoster extends StatelessWidget {
-  const _MovieDetailsPoster({
-    required this.posterPath,
-    required this.posterWitdh,
-  });
+  const _MovieDetailsPoster({required this.posterPath, required this.posterWitdh});
 
   final String posterPath;
   final double posterWitdh;
@@ -255,10 +256,7 @@ class _MovieDetailsPoster extends StatelessWidget {
 }
 
 class _MovieDetailsText extends StatelessWidget {
-  const _MovieDetailsText({
-    required this.movie,
-    required this.width,
-  });
+  const _MovieDetailsText({required this.movie, required this.width});
 
   final double width;
   final Movie movie;
@@ -273,10 +271,7 @@ class _MovieDetailsText extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(movie.title, style: textStyles.titleLarge),
-          Text(
-            movie.overview,
-            textAlign: TextAlign.justify,
-          ),
+          Text(movie.overview, textAlign: TextAlign.justify),
         ],
       ),
     );
@@ -293,11 +288,15 @@ class _MovieGenres extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 10,
-      children: movie.genreIds
-          .map((genre) => Chip(
-              label: Text(genre),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))
-          .toList(),
+      children:
+          movie.genreIds
+              .map(
+                (genre) => Chip(
+                  label: Text(genre),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                ),
+              )
+              .toList(),
     );
   }
 }
@@ -312,31 +311,34 @@ class _MovieActors extends ConsumerWidget {
     final actors = ref.watch(actorsByMovieProvider);
 
     return SizedBox(
-        height: 300,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: actors.length,
-          itemBuilder: (context, index) {
-            final actor = actors[index];
-            return Container(
-              padding: const EdgeInsets.all(8),
-              width: 135,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ActorPhoto(actor: actor),
-                  Text(actor.name, maxLines: 2),
-                  Text(
-                    actor.character ?? "",
-                    maxLines: 2,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+      height: 300,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: actors.length,
+        itemBuilder: (context, index) {
+          final actor = actors[index];
+          return Container(
+            padding: const EdgeInsets.all(8),
+            width: 135,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _ActorPhoto(actor: actor),
+                Text(actor.name, maxLines: 2),
+                Text(
+                  actor.character ?? "",
+                  maxLines: 2,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
-            );
-          },
-        ));
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 

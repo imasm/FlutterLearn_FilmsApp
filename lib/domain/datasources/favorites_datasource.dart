@@ -1,4 +1,4 @@
-import 'package:cinemapedia/domain/entities/favorite_movie.dart';
+import 'package:my_movies/domain/entities/favorite_movie.dart';
 
 abstract class FavoritesDatasource {
   Future<bool> toogleFavorite(FavoriteMovie favoriteMovie);

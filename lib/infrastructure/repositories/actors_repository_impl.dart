@@ -1,4 +1,4 @@
-import 'package:cinemapedia/domain/domain.dart';
+import 'package:my_movies/domain/domain.dart';
 
 class ActorsRepositoryImpl extends ActorsRepository {
   final ActorsDatasource actorsDataSource;
@@ -9,5 +9,4 @@ class ActorsRepositoryImpl extends ActorsRepository {
   Future<List<Actor>> getActorsByMovie(String movieId) async {
     return await actorsDataSource.getActorsByMovie(movieId);
   }
-
 }

@@ -1,11 +1,11 @@
 {
-    "name": "cinemapedia",
-    "short_name": "cinemapedia",
+    "name": "my_movies",
+    "short_name": "my_movies",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "My Movies is an application created just for learning Flutter",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

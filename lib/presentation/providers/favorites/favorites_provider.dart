@@ -1,5 +1,5 @@
-import 'package:cinemapedia/domain/domain.dart';
-import 'package:cinemapedia/presentation/providers/providers.dart';
+import 'package:my_movies/domain/domain.dart';
+import 'package:my_movies/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final favoritesProvider = StateNotifierProvider<FavoritesNotifier, Map<int, FavoriteMovie>>((ref) {

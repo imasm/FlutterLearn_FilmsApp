@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "cinemapedia" "\0"
+            VALUE "CompanyName", "dev.imasm" "\0"
+            VALUE "FileDescription", "My Movies is an application created just for learning Flutter" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "cinemapedia" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "cinemapedia.exe" "\0"
-            VALUE "ProductName", "cinemapedia" "\0"
+            VALUE "InternalName", "my_movies" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 Ivan Masmitja. All rights reserved." "\0"
+            VALUE "OriginalFilename", "my_movies.exe" "\0"
+            VALUE "ProductName", "My Movies" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

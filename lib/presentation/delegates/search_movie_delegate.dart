@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemapedia/config/helpers/human_formats.dart';
-import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:my_movies/config/helpers/human_formats.dart';
+import 'package:my_movies/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 
 typedef SearchMoviesCallback = Future<List<Movie>> Function(String query);
@@ -38,7 +38,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       //isLoadingStream.add(true);
       final movies = await searchMovies(query);
       initialMovies = movies;
-      
+
       if (!debouncedMovies.isClosed) {
         debouncedMovies.add(movies);
       }
@@ -62,36 +62,41 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   List<Widget>? buildActions(BuildContext context) {
     return [
       StreamBuilder(
-          initialData: false,
-          stream: isLoadingStream.stream,
-          builder: (context, snapshot) {
-            final isLoading = snapshot.data ?? false;
-            return isLoading ? searchingSpinner() : closeSearchButton();
-          })
+        initialData: false,
+        stream: isLoadingStream.stream,
+        builder: (context, snapshot) {
+          final isLoading = snapshot.data ?? false;
+          return isLoading ? searchingSpinner() : closeSearchButton();
+        },
+      ),
     ];
   }
 
   Widget searchingSpinner() {
     return SpinPerfect(
-        duration: const Duration(seconds: 1),
-        spins: 10,
-        infinite: true,
-        child: IconButton(onPressed: () => {}, icon: const Icon(Icons.refresh)));
+      duration: const Duration(seconds: 1),
+      spins: 10,
+      infinite: true,
+      child: IconButton(onPressed: () => {}, icon: const Icon(Icons.refresh)),
+    );
   }
 
   Widget closeSearchButton() {
     return FadeIn(
-        animate: query.isNotEmpty, child: IconButton(onPressed: () => {query = ''}, icon: const Icon(Icons.clear)));
+      animate: query.isNotEmpty,
+      child: IconButton(onPressed: () => {query = ''}, icon: const Icon(Icons.clear)),
+    );
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
-        onPressed: () {
-          clearStreams();
-          close(context, null);
-        },
-        icon: const Icon(Icons.arrow_back));
+      onPressed: () {
+        clearStreams();
+        close(context, null);
+      },
+      icon: const Icon(Icons.arrow_back),
+    );
   }
 
   @override
@@ -107,23 +112,25 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   Widget _buildResultsAndSuggestions() {
     return StreamBuilder(
-        initialData: initialMovies,
-        stream: debouncedMovies.stream,
-        builder: (context, snapshot) {
-          final movies = snapshot.data ?? [];
+      initialData: initialMovies,
+      stream: debouncedMovies.stream,
+      builder: (context, snapshot) {
+        final movies = snapshot.data ?? [];
 
-          return ListView.builder(
-            itemCount: movies.length,
-            itemBuilder: (context, index) {
-              return _MovieItem(
-                  movie: movies[index],
-                  onMovieSelected: (movie) {
-                    clearStreams();
-                    close(context, movie);
-                  });
-            },
-          );
-        });
+        return ListView.builder(
+          itemCount: movies.length,
+          itemBuilder: (context, index) {
+            return _MovieItem(
+              movie: movies[index],
+              onMovieSelected: (movie) {
+                clearStreams();
+                close(context, movie);
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }
 
@@ -158,18 +165,25 @@ class _MovieItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(movie.title, style: textStyles.titleMedium),
-                  Text(movie.overview, style: textStyles.bodySmall, maxLines: 5, overflow: TextOverflow.ellipsis),
+                  Text(
+                    movie.overview,
+                    style: textStyles.bodySmall,
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   Row(
                     children: [
                       Icon(Icons.star_half_rounded, color: Colors.yellow.shade800),
                       const SizedBox(width: 5),
-                      Text(HumanFormats.humanReadableNumber(movie.voteAverage, 1),
-                          style: textStyles.bodyMedium?.copyWith(color: Colors.yellow.shade900))
+                      Text(
+                        HumanFormats.humanReadableNumber(movie.voteAverage, 1),
+                        style: textStyles.bodyMedium?.copyWith(color: Colors.yellow.shade900),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cinemapedia/config/helpers/human_formats.dart';
-import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:my_movies/config/helpers/human_formats.dart';
+import 'package:my_movies/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,8 +21,13 @@ class MoviesHorizontalListview extends StatefulWidget {
 
   final VoidCallback? onNextPage;
 
-  const MoviesHorizontalListview(
-      {super.key, required this.movies, this.sectionTitle, this.sectionSubtitle, this.onNextPage});
+  const MoviesHorizontalListview({
+    super.key,
+    required this.movies,
+    this.sectionTitle,
+    this.sectionSubtitle,
+    this.onNextPage,
+  });
 
   @override
   State<MoviesHorizontalListview> createState() => _MoviesHorizontalListviewState();
@@ -56,7 +61,7 @@ class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
       height: 380,
       child: Column(
         children: [
-          // setion title 
+          // setion title
           if (widget.sectionTitle != null || widget.sectionSubtitle != null)
             _SectionTitle(title: widget.sectionTitle, subtitle: widget.sectionSubtitle),
 
@@ -66,7 +71,8 @@ class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
               scrollDirection: Axis.horizontal,
               controller: _scrollController,
               itemCount: widget.movies.length,
-              itemBuilder: (_, int index) => FadeInRight(child: _MovieSlide(movie: widget.movies[index])),
+              itemBuilder:
+                  (_, int index) => FadeInRight(child: _MovieSlide(movie: widget.movies[index])),
             ),
           ),
         ],
@@ -77,10 +83,7 @@ class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
 
 // Show the title of the section and an optional subtitle.
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({
-    required this.title,
-    required this.subtitle,
-  });
+  const _SectionTitle({required this.title, required this.subtitle});
 
   final String? title;
   final String? subtitle;
@@ -98,9 +101,10 @@ class _SectionTitle extends StatelessWidget {
           const Spacer(),
           if (subtitle != null)
             FilledButton.tonal(
-                style: const ButtonStyle(visualDensity: VisualDensity.compact),
-                onPressed: () {},
-                child: Text(subtitle!))
+              style: const ButtonStyle(visualDensity: VisualDensity.compact),
+              onPressed: () {},
+              child: Text(subtitle!),
+            ),
         ],
       ),
     );
@@ -122,7 +126,7 @@ class _MovieSlide extends StatelessWidget {
         children: [
           SizedBox(width: 150, child: _MoviePoster(movie: movie)),
           SizedBox(width: 150, child: _MovieTitle(movie: movie)),
-          SizedBox(width: 150, child: _MovieRating(movie: movie))
+          SizedBox(width: 150, child: _MovieRating(movie: movie)),
         ],
       ),
     );
@@ -133,9 +137,7 @@ class _MovieSlide extends StatelessWidget {
 // Until the image is loaded, a circular progress indicator is shown.
 // The poster is clickable and it will navigate to the movie details page.
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({
-    required this.movie,
-  });
+  const _MoviePoster({required this.movie});
 
   final Movie movie;
 
@@ -146,19 +148,23 @@ class _MoviePoster extends StatelessWidget {
     }
 
     return ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.network(
-          movie.posterPath,
-          width: 150,
-          fit: BoxFit.cover,
-          loadingBuilder: (context, image, loadingProgress) {
-            if (loadingProgress != null) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      borderRadius: BorderRadius.circular(20),
+      child: Image.network(
+        movie.posterPath,
+        width: 150,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, image, loadingProgress) {
+          if (loadingProgress != null) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            return GestureDetector(onTap: () => context.push('/movies/${movie.id}'), child: FadeIn(child: image));
-          },
-        ));
+          return GestureDetector(
+            onTap: () => context.push('/movies/${movie.id}'),
+            child: FadeIn(child: image),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -172,12 +178,7 @@ class _MovieTitle extends StatelessWidget {
     final theme = Theme.of(context);
     final titleStyle = theme.textTheme.titleMedium;
 
-    return Text(
-      movie.title,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-      style: titleStyle,
-    );
+    return Text(movie.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: titleStyle);
   }
 }
 
@@ -195,13 +196,13 @@ class _MovieRating extends StatelessWidget {
       children: [
         Icon(Icons.star_half, color: Colors.yellow.shade800),
         const SizedBox(width: 5),
-        Text('${movie.voteAverage}',
-            style: infoStyle?.copyWith(color: Colors.yellow.shade800, fontWeight: FontWeight.bold)),
+        Text(
+          '${movie.voteAverage}',
+          style: infoStyle?.copyWith(color: Colors.yellow.shade800, fontWeight: FontWeight.bold),
+        ),
         const Spacer(),
         Text(HumanFormats.humanReadableNumber(movie.popularity), style: infoStyle),
       ],
     );
   }
 }
-
-

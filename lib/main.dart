@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:cinemapedia/config/device_setttings/windows_scroll_behavoir.dart';
-import 'package:cinemapedia/config/router/app_router.dart';
-import 'package:cinemapedia/config/theme/app_theme.dart';
+import 'package:my_movies/config/device_setttings/windows_scroll_behavoir.dart';
+import 'package:my_movies/config/router/app_router.dart';
+import 'package:my_movies/config/theme/app_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,9 +20,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool needsMouse = Platform.isWindows || Platform.isMacOS || Platform.isLinux || kIsWeb;
     return MaterialApp.router(
-        theme: AppTheme().current,
-        scrollBehavior:  needsMouse ? WindowsScrollBehavior(): null,
-        debugShowCheckedModeBanner: false,
-        routerConfig: appRouter);
+      theme: AppTheme().current,
+      scrollBehavior: needsMouse ? WindowsScrollBehavior() : null,
+      debugShowCheckedModeBanner: false,
+      routerConfig: appRouter,
+    );
   }
 }
